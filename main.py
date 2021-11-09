@@ -165,7 +165,7 @@ class WindowBuscar(QMainWindow):
             self.lineEdit_9.setText("")
             self.mostrartodo()
 
-    def cargarCliente(self):
+    def cargarCliente(self): #hola
 
         idCliente = self.lineEdit_2.text().strip()
         if idCliente == "":

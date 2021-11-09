@@ -25,7 +25,6 @@ def db_cliente(conn):
 		); 
 		""")
 
-
 def buscarClienteSegunId(conn, idCliente):
     try:
         cursor = conn.cursor()
