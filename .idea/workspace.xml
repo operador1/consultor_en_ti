@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="fcb31891-22b7-4e8a-a114-1803a4e37a67" name="Changes" comment="agregar archivos" />
+    <list default="true" id="fcb31891-22b7-4e8a-a114-1803a4e37a67" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -23,13 +23,13 @@
   </component>
   <component name="RunManager">
     <configuration name="anto" type="PythonConfigurationType" factoryName="Python">
-      <module name="proyecto6" />
+      <module name="consultor_en_ti" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
-      <option name="SDK_HOME" value="C:\Users\gaston\anaconda3\envs\python38\python.exe" />
+      <option name="SDK_HOME" value="C:\ProgramData\Anaconda3\envs\desarrollador\python.exe" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />

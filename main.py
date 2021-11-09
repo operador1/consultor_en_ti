@@ -18,9 +18,6 @@ class MainWindow(QMainWindow):
     def ventanaRegistro(self):
         guiRegistro.showMaximized()
 
-    # self.btnRegistrar.clicked.connect(self.ingresarCliente)
-    # 	#self.sexo.addItem(['M', 'F'])
-
     def ventanaCargar(self):
         guiCargar.showMaximized()
 
