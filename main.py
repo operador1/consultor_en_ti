@@ -56,7 +56,7 @@ class WindowRegistro(QMainWindow):
         idCliente = cursor.fetchall()[len(cursor.fetchall())]
         conn.close()
         idCliente = int(list(idCliente)[-1]) + 1
-        # agregar valores importantes cuit cel
+
 
         if (nombre.strip() == ''):
             pass
