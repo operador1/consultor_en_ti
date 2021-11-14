@@ -82,22 +82,6 @@ font: 20pt &quot;Century Gothic&quot;;</string>
               </property>
              </widget>
             </item>
-            <item>
-             <widget class="QPushButton" name="btnBuscar">
-              <property name="font">
-               <font>
-                <family>Century Gothic</family>
-                <pointsize>20</pointsize>
-                <weight>50</weight>
-                <italic>false</italic>
-                <bold>false</bold>
-               </font>
-              </property>
-              <property name="text">
-               <string>Buscar</string>
-              </property>
-             </widget>
-            </item>
            </layout>
           </item>
          </layout>
@@ -170,7 +154,7 @@ font: 20pt &quot;Century Gothic&quot;;</string>
          <string notr="true">font: 12pt &quot;MS Shell Dlg 2&quot;;</string>
         </property>
         <property name="currentIndex">
-         <number>2</number>
+         <number>1</number>
         </property>
         <widget class="QWidget" name="tab">
          <attribute name="title">
@@ -181,6 +165,16 @@ font: 20pt &quot;Century Gothic&quot;;</string>
          <attribute name="title">
           <string>Cuenta</string>
          </attribute>
+         <widget class="QTableWidget" name="tableWidget_2">
+          <property name="geometry">
+           <rect>
+            <x>40</x>
+            <y>40</y>
+            <width>581</width>
+            <height>251</height>
+           </rect>
+          </property>
+         </widget>
         </widget>
         <widget class="QWidget" name="tab_3">
          <attribute name="title">

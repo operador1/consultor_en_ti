@@ -41,7 +41,7 @@ class WindowRegistro(QMainWindow):
     def ingresarCliente(self):
         nombre = self.nombap.text()
         documento = self.numdoc.text()
-        cuit = self.numcuit.text()
+        cuit = self.numcuit.text().replace('-', '')
         celular = self.numcel.text()
         direccion = self.direc.text()
         localidad = self.loc.text()
@@ -82,7 +82,7 @@ class WindowCargar(QMainWindow):  # registrar trabajo
         factura = self.comboBox.currentText()
         monto = self.montotrab.text()
         fecha = self.fechaentreg.text()
-        cuit = self.cuitsolici.text()
+        cuit = self.cuitsolici.text().replace('-', '')
         dato = [tipo, factura, monto, fecha, cuit]
         insertar_base_trabajo(dato)
         guiTrabajoGuardado.show()
@@ -98,10 +98,10 @@ class WindowBuscar(QMainWindow):
         super().__init__()
         uic.loadUi('buscar_cliente.ui', self)
         self.setWindowTitle('Buscar un cliente')
-        self.btnBuscar.clicked.connect(self.buscarCliente)
+        # self.btnBuscar.clicked.connect(self.buscarCliente)
 
         self.pushButton.clicked.connect(self.mostrartodo)
-        # self.pushButton_2.clicked.connect(self.cargarIdCliente)
+        self.pushButton_2.clicked.connect(self.cargarIdCliente)
         # self.btnPagar.clicked.connect(self.pagarUnTrabajo)
         # self.tableWidgwt.horizontalHeaderItem(8)
         # self.tableWidget.setItem(rowPosition= 0, uic.QTableWidgetItem("text1"))
@@ -116,6 +116,7 @@ class WindowBuscar(QMainWindow):
         for i in [0, 1, 2, 3, 4, 5, 6, 7]:
             self.tableWidget.resizeColumnToContents(i)
         self.pushButton_2.clicked.connect(self.cargarCliente)
+        # cargarIdCliente
 
     def guardarModificacion(self):
 
@@ -155,14 +156,14 @@ class WindowBuscar(QMainWindow):
             self.lineEdit_9.setText("")
             self.mostrartodo()
 
-    def cargarCliente(self): #hola
+    def cargarCliente(self):  # hola
 
         idCliente = self.lineEdit_2.text().strip()
         if idCliente == "":
             pass
         else:
-            conn = conexion()
-            resultado = buscarClienteSegunId(conn, idCliente)
+
+            resultado = buscarClienteSegunId(idCliente)
             if resultado == "NO":
                 pass
             else:
@@ -180,7 +181,7 @@ class WindowBuscar(QMainWindow):
 
     def buscarCliente(self):
         nombreApellido = self.lineEdit.text()
-        numCuit = self.lineEdit_3.text()
+        numCuit = self.lineEdit_3.text().replace('-', '')
         print('nombre y apellido: ' + nombreApellido + '\nnumero de cuit: ' + numCuit)
         # dato = [nombreApellido, numCuit]
         dato = ['%' + nombreApellido + '%', '%' + numCuit + '%']
@@ -202,28 +203,58 @@ class WindowBuscar(QMainWindow):
         for i in [0, 1, 2, 3, 4, 5, 6, 7]:
             self.tableWidget.resizeColumnToContents(i)
 
-    def cargarIdcliente(self):
-        idCli = self.lineEdit_2.text()
-        print('id de Cliente: ' + idCli)
+    def cargarIdCliente(self):
+        idCli = self.lineEdit_2.text()  # id de cliente
+
+        conn = conexion()
+        cursor = conn.cursor()
+        numeroDeCuit = cursor.execute("select 'num_cuit' from Clientes where id_cliente==(?);", (idCli,)).fetchall()[0][
+            0].replace('-', '')  # str
+        print(numeroDeCuit)
+        print('----------s-s- CUIT  s-s-------------')
+
+        conn = conexion()
+        cursor = conn.cursor()
+
+        trabajosDeCuit=cursor.execute('select * from Trabajos where num_cuit==(?);', (numeroDeCuit,)).fetchall()
+        print('-=-=-=-=')
+        print(trabajosDeCuit)
+        print('-=-=-=-=')
+
+        # print('id de Cliente: ' + idCli)
 
     def actualizar_tableWidget_Automaticamente(self):
         print('mama mia!')
         self.tableWidget.clear()
 
         nombreApellido = self.lineEdit.text().strip()
-        numCuit = self.lineEdit_3.text().strip()
+        numCuit = self.lineEdit_3.text().strip().replace('-', '')
 
         print(numCuit)
 
         dato = ['%' + nombreApellido + '%', '%' + numCuit + '%']
 
         if dato[0] == '%%' and dato[1] == '%%':
-            self.tableWidget.setHorizontalHeaderLabels(['ID Cliente', 'Nombre y apellido', 'N° Documento', 'N° CUIT', 'N° CEL', 'Direccion', 'Localidad', 'Sexo'])
+            self.tableWidget.setHorizontalHeaderLabels(
+                ['ID Cliente', 'Nombre y apellido', 'N° Documento', 'N° CUIT', 'N° CEL', 'Direccion', 'Localidad',
+                 'Sexo'])
             # self.tableWidget.setCellWidget(0,0,self.tableWidget)
             self.tableWidget.setColumnCount(0)
             self.tableWidget.setRowCount(0)
+
         elif dato[0] != '%%' and dato[1] != '%%':
             self.tableWidget.setColumnCount(8)
+
+            conn = conexion()
+            cursor = conn.cursor()
+            cantidadDeFilas = cursor.execute('SELECT COUNT(ALL) from Clientes;').fetchall()[0]
+            self.tableWidget.setRowCount(cantidadDeFilas)
+
+            # conn = conexion()
+            # cursor = conn.cursor()
+            # cantidadDeFilas2 = cursor.execute('SELECT COUNT(ALL) from Clientes;').fetchall()[0]
+            # self.tableWidget.setRowCount(cantidadDeFilas)
+
             self.tableWidget.setHorizontalHeaderLabels(
                 ['ID Cliente', 'Nombre y apellido', 'N° Documento', 'N° CUIT', 'N° CEL', 'Direccion', 'Localidad',
                  'Sexo'])
@@ -235,8 +266,17 @@ class WindowBuscar(QMainWindow):
                     self.tableWidget.setItem(row_number, column_number, QtWidgets.QTableWidgetItem(str(data)))
             for i in [0, 1, 2, 3, 4, 5, 6, 7]:
                 self.tableWidget.resizeColumnToContents(i)
+
         elif dato[0] != '%%':
             self.tableWidget.setColumnCount(8)
+
+            conn = conexion()
+            cursor = conn.cursor()
+            cantidadDeFilas = list(cursor.execute('SELECT COUNT(ALL) from Clientes;').fetchall()[0])[0]
+            print(cantidadDeFilas)
+            print(type(cantidadDeFilas))
+            self.tableWidget.setRowCount(cantidadDeFilas)
+
             self.tableWidget.setHorizontalHeaderLabels(
                 ['ID Cliente', 'Nombre y apellido', 'N° Documento', 'N° CUIT', 'N° CEL', 'Direccion', 'Localidad',
                  'Sexo'])
@@ -253,6 +293,12 @@ class WindowBuscar(QMainWindow):
                 ['ID Cliente', 'Nombre y apellido', 'N° Documento', 'N° CUIT', 'N° CEL', 'Direccion', 'Localidad',
                  'Sexo'])
             self.tableWidget.setColumnCount(8)
+
+            conn = conexion()
+            cursor = conn.cursor()
+            cantidadDeFilas = list(cursor.execute('SELECT COUNT(ALL) from Clientes;').fetchall()[0])[0]
+            self.tableWidget.setRowCount(cantidadDeFilas)
+
             print(dato[1])
             resultado = extraer_base_cliente_numcuit(dato[1])
             for row_number, row_data in enumerate(resultado):
@@ -261,8 +307,6 @@ class WindowBuscar(QMainWindow):
                     self.tableWidget.setItem(row_number, column_number, QtWidgets.QTableWidgetItem(str(data)))
             for i in [0, 1, 2, 3, 4, 5, 6, 7]:
                 self.tableWidget.resizeColumnToContents(i)
-
-
 
     def actualizar_tableWidget(dato):  # dato = ['%' + nombreApellido + '%','%' + numCuit + '%']
         if dato[0] != '' and dato[1] != '':
