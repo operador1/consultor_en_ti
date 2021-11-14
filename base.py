@@ -10,7 +10,8 @@ def conexion():
         print("o rayos! :(")
 
 
-def db_cliente(conn):
+def db_cliente():
+    conn = conexion()
     cursor = conn.cursor()
     cursor.executescript(""" 
 		CREATE TABLE IF NOT EXISTS [Clientes] (
@@ -24,9 +25,12 @@ def db_cliente(conn):
 		[sexo] VARCHAR(10)  NULL
 		); 
 		""")
+    conn.commit()
+    conn.close()
 
-def buscarClienteSegunId(conn, idCliente):
+def buscarClienteSegunId(idCliente):
     try:
+        conn = conexion()
         cursor = conn.cursor()
         dato = cursor.execute(
             "SELECT nom_ape,num_doc,num_cuit,num_cel,direc,localidad,sexo FROM Clientes WHERE id_cliente==(?);",
@@ -37,7 +41,8 @@ def buscarClienteSegunId(conn, idCliente):
         return "NO"
 
 
-def guardarClienteModificado(conn, dato):
+def guardarClienteModificado(dato):
+    conn = conexion()
     cursor = conn.cursor()
     cursor.execute(
         "UPDATE Clientes SET nom_ape=(?),num_doc=(?),num_cuit=(?),num_cel=(?),direc=(?),localidad=(?),sexo=(?) WHERE id_cliente==(?)",
@@ -46,24 +51,25 @@ def guardarClienteModificado(conn, dato):
     conn.close()
 
 
-
-
-def insertar_base_cliente(conn, dato):  # [nombre, documento, cuit, celular, direccion,localidad,sexo]
+def insertar_base_cliente(dato):  # [nombre, documento, cuit, celular, direccion,localidad,sexo]
     try:
+        conn = conexion()
         cursor = conn.cursor()
         cursor.execute(
             "INSERT INTO Clientes(nom_ape, num_doc, num_cuit, num_cel, direc, localidad, sexo) VALUES (?,?,?,?,?,?,?)",
             dato)
         conn.commit()
-        return 'bien'
+        conn.close()
+        return 'cliente guardado'
     except ValueError:
         print("error del tipo ValueError")
     except sqlite3.IntegrityError:
-        print("error IntegrityError")
+        print("error IntegrityError, valores repetidos")
         return 'error'
 
 
-def db_trabajo(conn):
+def db_trabajo():
+    conn = conexion()
     cursor = conn.cursor()
     cursor.executescript("""
 		CREATE TABLE IF NOT EXISTS [Trabajos] (
@@ -75,15 +81,19 @@ def db_trabajo(conn):
 		[num_cuit] VARCHAR(13)  UNIQUE NOT NULL
 		);
 		""")
+    conn.commit()
+    conn.close()
 
 
-def insertar_base_trabajo(conn, dato):  # [tipo, factura, monto, fecha, cuit]
+def insertar_base_trabajo(dato):  # [tipo, factura, monto, fecha, cuit]
     try:
+        conn = conexion()
         cursor = conn.cursor()
-        cursor.execute(
-            "INSERT INTO Trabajos(tipo_trab, factura, monto_trab, fecha_entreg, num_cuit) VALUES (?,?,?,?,?)", dato)
+        cursor.execute("INSERT INTO Trabajos (tipo_trab,factura,monto_trab,fecha_entreg,num_cuit) VALUES (?,?,?,?,?)",
+                       dato)
         conn.commit()
-        print("bienn")
+        conn.close()
+        print("TRABAJO GUARDADO! ! !")
     except ValueError:
         print("error2valueerror")
     except sqlite3.IntegrityError:
@@ -92,28 +102,66 @@ def insertar_base_trabajo(conn, dato):  # [tipo, factura, monto, fecha, cuit]
 
 
 def extraer_base_cliente_nomape_numcuit(dato):  # dato=['%' + nombreApellido + '%','%' + numCuit + '%']
-    conn = conexion()
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM Clientes WHERE nom_ape like ? AND num_cuit like ?", dato)
-    return cursor
+    try:
+        conn = conexion()
+        cursor = conn.cursor()
+        print('---------------')
+        print(dato)
+        # print('----select * from clientes where nom_ape like 'a%';-----------')
+        resultado = cursor.execute("SELECT OR IGNORE * FROM Clientes WHERE nom_ape like ? AND num_cuit like ?",
+                                   dato, )
+        conn.close()
+        return resultado
+    except Error:
+        print('error en extraer_base_cliente_nomape_numcuit')
+
+def extraer_base_cliente_nomape(dato):  # dato=['%' + nombreApellido + '%']
+    try:
+        conn = conexion()
+        cursor = conn.cursor()
+        resultado = cursor.execute("SELECT OR IGNORE * FROM Clientes WHERE nom_ape like ?",dato, )
+        conn.close()
+        return resultado
+    except Error:
+        print('error en extraer_base_cliente_nomape_numcuit')
+def extraer_base_cliente_numcuit(dato):  # dato=['%' + nombreApellido + '%','%' + numCuit + '%']
+    try:
+        conn = conexion()
+        cursor = conn.cursor()
+        print('---------------')
+        print(dato)
+        # print('----select * from clientes where nom_ape like 'a%';-----------')
+        resultado = cursor.execute("SELECT OR IGNORE * FROM Clientes WHERE num_cuit like ?",
+                                   dato, )
+        conn.close()
+        return resultado
+    except Error:
+        print('error en extraer_base_cliente_nomape_numcuit')
 
 
 def extraer_base_cliente_nomape(dato):  # dato=['%' + nombreApellido + '%']
     conn = conexion()
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM Clientes WHERE nom_ape like ?", dato)
-    return cursor
+    resultado = cursor.execute("SELECT * FROM Clientes WHERE nom_ape like ?", (dato,)).fetchall()
+    conn.close()
+    return resultado
 
 
 def extraer_base_cliente_numcuit(dato):  # dato=['%' + numCuit + '%']
-    conn = conexion()
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM Clientes WHERE num_cuit like ?", dato)
-    return cursor
+    try:
+        conn = conexion()
+        cursor = conn.cursor()
+        resultado = cursor.execute("SELECT * FROM Clientes WHERE num_cuit like ?", (dato,)).fetchall()
+        print('------a-d-awd-awd')
+        conn.close()
+        return resultado
+    except Error:
+        print('hola mundo!')
 
 
 def extraer_todo_base_cliente():
     conn = conexion()
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM Clientes ")
-    return cursor
+    resultado = cursor.execute("SELECT * FROM Clientes ")
+    conn.close()
+    return resultado
