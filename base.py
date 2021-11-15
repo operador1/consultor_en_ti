@@ -28,6 +28,7 @@ def db_cliente():
     conn.commit()
     conn.close()
 
+
 def buscarClienteSegunId(idCliente):
     try:
         conn = conexion()
@@ -85,20 +86,51 @@ def db_trabajo():
     conn.close()
 
 
-def insertar_base_trabajo(dato):  # [tipo, factura, monto, fecha, cuit]
+def existeCuitParaTrabajo(dato):  # [tipo, factura, monto, fecha, cuit]
     try:
         conn = conexion()
         cursor = conn.cursor()
-        cursor.execute("INSERT INTO Trabajos (tipo_trab,factura,monto_trab,fecha_entreg,num_cuit) VALUES (?,?,?,?,?)",
-                       dato)
+        print('---------22222-----------')
+        print(dato) #[tipo, factura, monto, fecha, cuit]
+        existe = \
+            cursor.execute("select count(*) num_cuit FROM Clientes WHERE num_cuit==(?);", (dato[4],)).fetchall()[0][
+                0]
+        print(existe)
+        if existe == 1:
+            return 'existe'
+        elif existe == 0:
+            return 'no existe'
+        else:
+            print('error inesperado en existencia de cliente para el trabajo, un problemon')
+            return 'no existe'
+    except Error:
+        pass
+        # if existe
+
+        # cursor.execute("INSERT INTO Trabajos (tipo_trab,factura,monto_trab,fecha_entreg,num_cuit) VALUES (?,?,?,?,?)",
+        #                dato)
+        # conn.commit()
+        # conn.close()
+        # print("TRABAJO GUARDADO! ! !")
+    # except ValueError:
+    #     print("error2valueerror")
+    # except sqlite3.IntegrityError:
+    #     print("error2integrityerror")
+    #     return 'error'
+
+
+def guardoTrabajoSegunCuit(dato):  # dato = [tipo, factura, monto, fecha, cuit]
+    try:
+        conn = conexion()
+        cursor = conn.cursor()
+        print(dato)
+        cursor.execute("INSERT INTO Trabajos (tipo_trab,factura,monto_trab,fecha_entreg,num_cuit) VALUES (?,?,?,?,?)",dato)
         conn.commit()
         conn.close()
-        print("TRABAJO GUARDADO! ! !")
-    except ValueError:
-        print("error2valueerror")
-    except sqlite3.IntegrityError:
-        print("error2integrityerror")
-        return 'error'
+    except Error:
+        print('====ERROR====')
+
+        # (tipo_trab,factura,monto_trab,fecha_entreg,num_cuit)
 
 
 def extraer_base_cliente_nomape_numcuit(dato):  # dato=['%' + nombreApellido + '%','%' + numCuit + '%']
@@ -114,16 +146,20 @@ def extraer_base_cliente_nomape_numcuit(dato):  # dato=['%' + nombreApellido + '
         return resultado
     except Error:
         print('error en extraer_base_cliente_nomape_numcuit')
+        return 'error'
+
 
 def extraer_base_cliente_nomape(dato):  # dato=['%' + nombreApellido + '%']
     try:
         conn = conexion()
         cursor = conn.cursor()
-        resultado = cursor.execute("SELECT OR IGNORE * FROM Clientes WHERE nom_ape like ?",dato, )
+        resultado = cursor.execute("SELECT OR IGNORE * FROM Clientes WHERE nom_ape like ?", dato, )
         conn.close()
         return resultado
     except Error:
         print('error en extraer_base_cliente_nomape_numcuit')
+
+
 def extraer_base_cliente_numcuit(dato):  # dato=['%' + nombreApellido + '%','%' + numCuit + '%']
     try:
         conn = conexion()

@@ -36,12 +36,12 @@ class WindowRegistro(QMainWindow):
         super().__init__()
         uic.loadUi('registrar_cliente.ui', self)
         self.setWindowTitle('Registrar un nuevo cliente')
-        self.btnRegistrar.clicked.connect(self.ingresarCliente)
+        self.btnRegistrar22.clicked.connect(self.ingresarCliente)
 
     def ingresarCliente(self):
         nombre = self.nombap.text()
         documento = self.numdoc.text()
-        cuit = self.numcuit.text().replace('-', '')
+        cuit = self.numcuit.text()
         celular = self.numcel.text()
         direccion = self.direc.text()
         localidad = self.loc.text()
@@ -67,8 +67,8 @@ class WindowRegistro(QMainWindow):
             self.sexo.setCurrentIndex(0)
             guiClienteGuardado.show()
 
-
-class WindowCargar(QMainWindow):  # registrar trabajo
+# registrar trabajo
+class WindowCargar(QMainWindow):
     def __init__(self):
         super().__init__()
         uic.loadUi('registrar_trabajo.ui', self)
@@ -81,19 +81,44 @@ class WindowCargar(QMainWindow):  # registrar trabajo
         self.cuitsolici.setText("")
 
     def ingresarTrabajo(self):
-        tipo = self.tipotrab.text()
-        factura = self.comboBox.currentText()
-        monto = self.montotrab.text()
-        fecha = self.fechaentreg.text()
-        cuit = self.cuitsolici.text().replace('-', '')
+        tipo = self.tipotrab.text().strip()
+        factura = self.comboBox.currentText().strip()
+        monto = self.montotrab.text().strip()
+        fecha = self.fechaentreg.text().strip()
+        cuit = self.cuitsolici.text().strip()
         dato = [tipo, factura, monto, fecha, cuit]
-        insertar_base_trabajo(dato)
-        guiTrabajoGuardado.show()
-        self.tipotrab.setText("")
-        self.comboBox.setCurrentIndex(0)
-        self.montotrab.setText("")
-        self.fechaentreg.setText("")
-        self.cuitsolici.setText("")
+        ############PROBLEMA usar cuit como id del cliente
+
+        respuesta = existeCuitParaTrabajo(dato) #'existe' o 'no existe'
+        print('----------respuesta-------------')
+        print(respuesta)
+
+        if respuesta=='existe':
+            guardoTrabajoSegunCuit(dato)
+            guiTrabajoGuardado.show()
+            self.tipotrab.setText("")
+            self.comboBox.setCurrentIndex(0)
+            self.montotrab.setText("")
+            self.fechaentreg.setText("")
+            self.cuitsolici.setText("")
+        elif respuesta=='no existe':
+            gui_noHayClienteRegistrado.show()
+            self.tipotrab.setText("")
+            self.comboBox.setCurrentIndex(0)
+            self.montotrab.setText("")
+            self.fechaentreg.setText("")
+            self.cuitsolici.setText("")
+
+
+        # if respuesta=='no hay cliente':
+        #     gui_noHayClienteRegistrado.show()
+        # else:
+        #     guiTrabajoGuardado.show()
+        #     self.tipotrab.setText("")
+        #     self.comboBox.setCurrentIndex(0)
+        #     self.montotrab.setText("")
+        #     self.fechaentreg.setText("")
+        #     self.cuitsolici.setText("")   ###re
 
 
 class WindowBuscar(QMainWindow):
@@ -184,7 +209,7 @@ class WindowBuscar(QMainWindow):
 
     def buscarCliente(self):
         nombreApellido = self.lineEdit.text()
-        numCuit = self.lineEdit_3.text().replace('-', '')
+        numCuit = self.lineEdit_3.text()
         print('nombre y apellido: ' + nombreApellido + '\nnumero de cuit: ' + numCuit)
         # dato = [nombreApellido, numCuit]
         dato = ['%' + nombreApellido + '%', '%' + numCuit + '%']
@@ -212,7 +237,7 @@ class WindowBuscar(QMainWindow):
         conn = conexion()
         cursor = conn.cursor()
         numeroDeCuit = cursor.execute("select 'num_cuit' from Clientes where id_cliente==(?);", (idCli,)).fetchall()[0][
-            0].replace('-', '')  # str
+            0]  # str
         print(numeroDeCuit)
         print('----------s-s- CUIT  s-s-------------')
 
@@ -231,7 +256,7 @@ class WindowBuscar(QMainWindow):
         self.tableWidget.clear()
 
         nombreApellido = self.lineEdit.text().strip()
-        numCuit = self.lineEdit_3.text().strip().replace('-', '')
+        numCuit = self.lineEdit_3.text().strip()
 
         print(numCuit)
 
@@ -371,6 +396,11 @@ class WindowTrabajoGuardado(QMainWindow):
         uic.loadUi('gui_trabajoGuardado.ui', self)
         self.setWindowTitle('trabajo guardado')
 
+class WindowAlertaClienteNoRegistrado(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        uic.loadUi('gui_noHayClienteRegistrado.ui', self)
+        self.setWindowTitle('trabajo guardado')
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
@@ -385,6 +415,7 @@ if __name__ == '__main__':
     guiGanan = WindowGanan()
     guiInsu = WindowInsu()
     guiAlerta = WindowAlerta()
+    gui_noHayClienteRegistrado = WindowAlertaClienteNoRegistrado()
     guiClienteGuardado = WindowClienteGuardado()
     guiTrabajoGuardado = WindowTrabajoGuardado()
     gui.show()

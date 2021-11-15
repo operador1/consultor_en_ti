@@ -228,7 +228,7 @@
      </rect>
     </property>
     <property name="inputMask">
-     <string>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa; </string>
+     <string>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="loc">
@@ -241,7 +241,7 @@
      </rect>
     </property>
     <property name="inputMask">
-     <string>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa; </string>
+     <string>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="direc">
@@ -254,7 +254,7 @@
      </rect>
     </property>
     <property name="inputMask">
-     <string>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx; </string>
+     <string>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="numcel">
@@ -267,7 +267,7 @@
      </rect>
     </property>
     <property name="inputMask">
-     <string>999999999999999; </string>
+     <string>999999999999999</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="numcuit">
@@ -280,7 +280,7 @@
      </rect>
     </property>
     <property name="inputMask">
-     <string>99-99999999-9; </string>
+     <string>99-99999999-9</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="numdoc">
@@ -293,7 +293,7 @@
      </rect>
     </property>
     <property name="inputMask">
-     <string>99999999; </string>
+     <string>99999999</string>
     </property>
    </widget>
    <widget class="QComboBox" name="sexo">
@@ -332,7 +332,7 @@
      <string>Cancelar</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="btnRegistrar">
+   <widget class="QPushButton" name="btnRegistrar22">
     <property name="geometry">
      <rect>
       <x>480</x>
@@ -375,7 +375,7 @@
   <tabstop>direc</tabstop>
   <tabstop>loc</tabstop>
   <tabstop>sexo</tabstop>
-  <tabstop>btnRegistrar</tabstop>
+  <tabstop>btnRegistrar22</tabstop>
   <tabstop>btnCancelar</tabstop>
  </tabstops>
  <resources/>
