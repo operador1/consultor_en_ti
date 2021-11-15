@@ -76,10 +76,12 @@ def db_trabajo():
 		CREATE TABLE IF NOT EXISTS [Trabajos] (
 		[id_trabajo] INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT,
 		[tipo_trab] VARCHAR(55)  NOT NULL,
-		[factura] VARCHAR(5)  NOT NULL,
-		[monto_trab] VARCHAR(10)  NULL,
-		[fecha_entreg] VARCHAR(8)  NULL,
-		[num_cuit] VARCHAR(13)  UNIQUE NOT NULL
+		[factura] VARCHAR(55)  NOT NULL,
+		[monto_trab] VARCHAR(55)  NULL,
+		[fecha_entreg] VARCHAR(55)  NULL,
+		[num_cuit] VARCHAR(55)  UNIQUE NOT NULL,
+		[monto_pagado] VARCHAR(55) NULL,
+		[saldo] VARCHAR(55) NULL
 		);
 		""")
     conn.commit()
@@ -91,7 +93,7 @@ def existeCuitParaTrabajo(dato):  # [tipo, factura, monto, fecha, cuit]
         conn = conexion()
         cursor = conn.cursor()
         print('---------22222-----------')
-        print(dato) #[tipo, factura, monto, fecha, cuit]
+        print(dato)  # [tipo, factura, monto, fecha, cuit]
         existe = \
             cursor.execute("select count(*) num_cuit FROM Clientes WHERE num_cuit==(?);", (dato[4],)).fetchall()[0][
                 0]
@@ -119,18 +121,20 @@ def existeCuitParaTrabajo(dato):  # [tipo, factura, monto, fecha, cuit]
     #     return 'error'
 
 
-def guardoTrabajoSegunCuit(dato):  # dato = [tipo, factura, monto, fecha, cuit]
-    try:
-        conn = conexion()
-        cursor = conn.cursor()
-        print(dato)
-        cursor.execute("INSERT INTO Trabajos (tipo_trab,factura,monto_trab,fecha_entreg,num_cuit) VALUES (?,?,?,?,?)",dato)
-        conn.commit()
-        conn.close()
-    except Error:
-        print('====ERROR====')
+#        dato = [tipo,factura,monto,fecha,cuit]
+def guardoTrabajoSegunCuit2(dato):
+    conn = sqlite3.connect('base.db')
+    cursor = conn.cursor()
+    datoNuevo = [dato[0], dato[1], dato[2], dato[3], dato[4], dato[2]]
+    cursor.execute(
+        'insert into Trabajos(tipo_trab,factura,monto_trab,fecha_entreg,num_cuit,saldo) values (?,?,?,?,?,?)',
+        datoNuevo)
+    conn.commit()
+    conn.close()
 
-        # (tipo_trab,factura,monto_trab,fecha_entreg,num_cuit)
+
+def guardarSaldoDeTrabajo(monto):
+    pass
 
 
 def extraer_base_cliente_nomape_numcuit(dato):  # dato=['%' + nombreApellido + '%','%' + numCuit + '%']
@@ -195,9 +199,79 @@ def extraer_base_cliente_numcuit(dato):  # dato=['%' + numCuit + '%']
         print('hola mundo!')
 
 
-def extraer_todo_base_cliente():
-    conn = conexion()
+def extraer_todo_base_cliente(conn):
     cursor = conn.cursor()
-    resultado = cursor.execute("SELECT * FROM Clientes ")
-    conn.close()
+    resultado = cursor.execute("SELECT * FROM Clientes;")
+
     return resultado
+
+
+def extraer_cuit_del_cliente(conn, idCli):
+    cursor = conn.cursor()
+    cuitCliente = cursor.execute('select num_cuit from Clientes where id_cliente=(?)', (idCli,))
+    print(cuitCliente)
+    return cuitCliente
+
+
+def trabajosRealizadosSegunCuit(conn, cuit):
+    cursor = conn.cursor()
+    resultados = cursor.execute('select * from Trabajos where num_cuit=(?);', (cuit,))
+    print('hakuna matata')
+    return resultados
+
+
+def pagarUnMonto(idTrabajo, monto):
+    conn = sqlite3.connect('base.db')
+    cursor = conn.cursor()
+
+    montoPagado = cursor.execute('select monto_pagado from Trabajos where id_trabajo=(?)', (idTrabajo,)).fetchall()[0][
+        0]
+    if montoPagado == None:
+        montoPagado = 0
+
+    else:
+        float(montoPagado.replace('$', ''))
+        pass
+    montoPagado = float(montoPagado) + float(monto.replace('$', ''))
+
+    parametro1 = [montoPagado, idTrabajo]
+    cursor.execute('UPDATE Trabajos SET monto_pagado=(?) WHERE id_trabajo=(?)', parametro1)
+    #######################
+
+    #################
+    saldo = cursor.execute('select saldo from Trabajos where id_trabajo=(?)', (idTrabajo,)).fetchall()[0][0].replace(
+        '$', '')
+    saldo = float(saldo)
+    # saldo = saldo - montoPagado
+    saldo = saldo - float(monto)
+
+    print('----------SALDO-----------')
+    print(saldo)
+
+    parametro = [saldo, idTrabajo]
+    cursor.execute('UPDATE Trabajos SET saldo=? WHERE id_trabajo=(?)', parametro)
+
+    conn.commit()
+    conn.close()
+
+
+def cauitSegunIdTrabajo(conn, idTrabajo):
+    cursor = conn.cursor()
+    cuit = cursor.execute('select num_cuit from Trabajos where id_trabajo=(?)', (idTrabajo,)).fetchall()[0][0]
+    return cuit
+
+
+def calcularIngresoBruto(conn, f1, f2):
+    cursor = conn.cursor()
+    fechas = [f1, f2]
+    listaMontoPagado = cursor.execute('select monto_pagado from Trabajos where monto_pagado between (?) and (?)',
+                                      fechas).fetchall()
+    listaMontoPagado2=cursor.execute('select monto_pagado from Trabajos').fetchall()
+    #select monto_pagado from Trabajos where monto_pagado between (?f1) and (?f2)
+
+    print('listaMontoPagado2')
+    print(listaMontoPagado2)
+
+
+def insertar_base_insumo(dato):
+    pass

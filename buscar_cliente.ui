@@ -150,83 +150,66 @@ font: 20pt &quot;Century Gothic&quot;;</string>
       </item>
       <item>
        <widget class="QTabWidget" name="tabWidget">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
         <property name="styleSheet">
          <string notr="true">font: 12pt &quot;MS Shell Dlg 2&quot;;</string>
         </property>
         <property name="currentIndex">
-         <number>1</number>
+         <number>0</number>
         </property>
         <widget class="QWidget" name="tab">
          <attribute name="title">
           <string>Trabajos realizados</string>
          </attribute>
-        </widget>
-        <widget class="QWidget" name="tab_2">
-         <attribute name="title">
-          <string>Cuenta</string>
-         </attribute>
-         <widget class="QTableWidget" name="tableWidget_2">
-          <property name="geometry">
-           <rect>
-            <x>40</x>
-            <y>40</y>
-            <width>581</width>
-            <height>251</height>
-           </rect>
-          </property>
-         </widget>
-        </widget>
-        <widget class="QWidget" name="tab_3">
-         <attribute name="title">
-          <string>Pagar</string>
-         </attribute>
-         <widget class="QLabel" name="label_3">
+         <widget class="QTableWidget" name="tableWidget_3">
           <property name="geometry">
            <rect>
             <x>20</x>
+            <y>10</y>
+            <width>661</width>
+            <height>192</height>
+           </rect>
+          </property>
+         </widget>
+         <widget class="QLineEdit" name="lineEdit_10">
+          <property name="geometry">
+           <rect>
+            <x>700</x>
             <y>20</y>
-            <width>339</width>
-            <height>33</height>
+            <width>113</width>
+            <height>20</height>
            </rect>
           </property>
-          <property name="text">
-           <string>Ingrese el monto a pagar:</string>
+          <property name="placeholderText">
+           <string>IdTrabajo</string>
           </property>
          </widget>
-         <widget class="QLineEdit" name="montoPago">
+         <widget class="QLineEdit" name="lineEdit_11">
           <property name="geometry">
            <rect>
-            <x>50</x>
-            <y>70</y>
-            <width>270</width>
-            <height>40</height>
+            <x>700</x>
+            <y>50</y>
+            <width>113</width>
+            <height>20</height>
            </rect>
           </property>
+          <property name="placeholderText">
+           <string>monto</string>
+          </property>
          </widget>
-         <widget class="QPushButton" name="btnPagar">
+         <widget class="QPushButton" name="pushButton_4">
           <property name="geometry">
            <rect>
-            <x>440</x>
-            <y>70</y>
-            <width>152</width>
+            <x>700</x>
+            <y>80</y>
+            <width>111</width>
             <height>41</height>
            </rect>
           </property>
           <property name="text">
-           <string>PAGAR</string>
-          </property>
-         </widget>
-         <widget class="QLabel" name="labelRta">
-          <property name="geometry">
-           <rect>
-            <x>680</x>
-            <y>70</y>
-            <width>321</width>
-            <height>33</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string/>
+           <string>Pagar</string>
           </property>
          </widget>
         </widget>
@@ -443,63 +426,6 @@ font: 20pt &quot;Century Gothic&quot;;</string>
            </widget>
           </item>
          </layout>
-        </widget>
-        <widget class="QWidget" name="tab_5">
-         <attribute name="title">
-          <string>Borrar cliente</string>
-         </attribute>
-         <widget class="QLabel" name="label_2">
-          <property name="geometry">
-           <rect>
-            <x>20</x>
-            <y>30</y>
-            <width>873</width>
-            <height>33</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>¿Está seguro de que desea eliminar este cliente y todos sus datos?</string>
-          </property>
-         </widget>
-         <widget class="QPushButton" name="btnBorraCli">
-          <property name="geometry">
-           <rect>
-            <x>110</x>
-            <y>90</y>
-            <width>152</width>
-            <height>41</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>SI</string>
-          </property>
-         </widget>
-         <widget class="QPushButton" name="btnNoBorraCli">
-          <property name="geometry">
-           <rect>
-            <x>560</x>
-            <y>90</y>
-            <width>152</width>
-            <height>41</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>NO</string>
-          </property>
-         </widget>
-         <widget class="QLabel" name="label_12">
-          <property name="geometry">
-           <rect>
-            <x>326</x>
-            <y>162</y>
-            <width>171</width>
-            <height>41</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-         </widget>
         </widget>
        </widget>
       </item>

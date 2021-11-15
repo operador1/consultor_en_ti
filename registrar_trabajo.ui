@@ -153,7 +153,7 @@
      </rect>
     </property>
     <property name="inputMask">
-     <string>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx; </string>
+     <string>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="fechaentreg">
@@ -166,7 +166,7 @@
      </rect>
     </property>
     <property name="inputMask">
-     <string>99-99-99; </string>
+     <string>99-99-99</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="montotrab">
@@ -179,7 +179,7 @@
      </rect>
     </property>
     <property name="inputMask">
-     <string>$999999999; </string>
+     <string>$999999999</string>
     </property>
    </widget>
    <widget class="QPushButton" name="btnCancelar">
@@ -249,7 +249,7 @@
      </rect>
     </property>
     <property name="inputMask">
-     <string>99-99999999-9; </string>
+     <string>99-99999999-9</string>
     </property>
    </widget>
    <widget class="QComboBox" name="comboBox">
@@ -271,6 +271,16 @@
       <string>NO</string>
      </property>
     </item>
+   </widget>
+   <widget class="QDateEdit" name="dateEdit">
+    <property name="geometry">
+     <rect>
+      <x>380</x>
+      <y>290</y>
+      <width>110</width>
+      <height>22</height>
+     </rect>
+    </property>
    </widget>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>

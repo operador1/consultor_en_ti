@@ -1,7 +1,7 @@
 import sys
 from PyQt5 import uic, QtGui
 from PyQt5 import QtWidgets
-from PyQt5.QtWidgets import QMainWindow, QApplication
+from PyQt5.QtWidgets import QMainWindow, QApplication, QDateEdit
 from base import *
 
 
@@ -54,8 +54,8 @@ class WindowRegistro(QMainWindow):
         # idCliente = list(consulta2[0])[0] + 1 #int:
         ######################
         dato = [nombre, documento, cuit, celular, direccion, localidad, sexo]
-        respuesta=insertar_base_cliente(dato)
-        if respuesta=='error, valores repetidos':
+        respuesta = insertar_base_cliente(dato)
+        if respuesta == 'error, valores repetidos':
             guiAlerta.show()
         else:
             self.nombap.setText("")
@@ -67,6 +67,7 @@ class WindowRegistro(QMainWindow):
             self.sexo.setCurrentIndex(0)
             guiClienteGuardado.show()
 
+
 # registrar trabajo
 class WindowCargar(QMainWindow):
     def __init__(self):
@@ -77,31 +78,46 @@ class WindowCargar(QMainWindow):
         self.tipotrab.setText("")
         self.comboBox.setCurrentIndex(0)
         self.montotrab.setText("")
-        self.fechaentreg.setText("")
+
+        self.fechaentreg.setText("")  # te vas
+        # self.dateEdit.
+
         self.cuitsolici.setText("")
 
     def ingresarTrabajo(self):
         tipo = self.tipotrab.text().strip()
         factura = self.comboBox.currentText().strip()
         monto = self.montotrab.text().strip()
+
         fecha = self.fechaentreg.text().strip()
+
+        dia = self.dateEdit.date().day()
+        mes = self.dateEdit.date().month()
+        anio = self.dateEdit.date().year()
+        print(dia , mes, anio)
+        fechaNueva = str(dia) + '/' + str(mes) + '/' + str(anio)
+
         cuit = self.cuitsolici.text().strip()
-        dato = [tipo, factura, monto, fecha, cuit]
+        # dato = [tipo, factura, monto, fecha, cuit]
+        dato = [tipo, factura, monto, fechaNueva, cuit]
+        # saldo=monto
         ############PROBLEMA usar cuit como id del cliente
 
-        respuesta = existeCuitParaTrabajo(dato) #'existe' o 'no existe'
+        respuesta = existeCuitParaTrabajo(dato)  # 'existe' o 'no existe'
         print('----------respuesta-------------')
         print(respuesta)
 
-        if respuesta=='existe':
-            guardoTrabajoSegunCuit(dato)
+        if respuesta == 'existe':
+
+            guardoTrabajoSegunCuit2(dato)
             guiTrabajoGuardado.show()
+            # guardarSaldoDeTrabajo(saldo)
             self.tipotrab.setText("")
             self.comboBox.setCurrentIndex(0)
             self.montotrab.setText("")
             self.fechaentreg.setText("")
             self.cuitsolici.setText("")
-        elif respuesta=='no existe':
+        elif respuesta == 'no existe':
             gui_noHayClienteRegistrado.show()
             self.tipotrab.setText("")
             self.comboBox.setCurrentIndex(0)
@@ -110,30 +126,16 @@ class WindowCargar(QMainWindow):
             self.cuitsolici.setText("")
 
 
-        # if respuesta=='no hay cliente':
-        #     gui_noHayClienteRegistrado.show()
-        # else:
-        #     guiTrabajoGuardado.show()
-        #     self.tipotrab.setText("")
-        #     self.comboBox.setCurrentIndex(0)
-        #     self.montotrab.setText("")
-        #     self.fechaentreg.setText("")
-        #     self.cuitsolici.setText("")   ###re
-
-
 class WindowBuscar(QMainWindow):
     def __init__(self):
         super().__init__()
         uic.loadUi('buscar_cliente.ui', self)
         self.setWindowTitle('Buscar un cliente')
-        # self.btnBuscar.clicked.connect(self.buscarCliente)
-
         self.pushButton.clicked.connect(self.mostrartodo)
+        self.pushButton_4.clicked.connect(self.pagarUnTrabajo)
+
         self.pushButton_2.clicked.connect(self.cargarIdCliente)
-        # self.btnPagar.clicked.connect(self.pagarUnTrabajo)
-        # self.tableWidgwt.horizontalHeaderItem(8)
-        # self.tableWidget.setItem(rowPosition= 0, uic.QTableWidgetItem("text1"))
-        self.tableWidget.setColumnCount(8)
+        self.tableWidget.setColumnCount(10)
         self.pushButton_3.clicked.connect(self.guardarModificacion)
 
         self.lineEdit.cursorPositionChanged.connect(self.actualizar_tableWidget_Automaticamente)
@@ -190,7 +192,6 @@ class WindowBuscar(QMainWindow):
         if idCliente == "":
             pass
         else:
-
             resultado = buscarClienteSegunId(idCliente)
             if resultado == "NO":
                 pass
@@ -221,8 +222,12 @@ class WindowBuscar(QMainWindow):
             self.actualizar_tableWidget(dato)
 
     def mostrartodo(self):
+        conn = conexion()
         print('mostrartodo')
-        resultado = extraer_todo_base_cliente()
+
+        resultado = extraer_todo_base_cliente(conn)
+        self.tableWidget.setColumnCount(8)
+        print('222222222222222222222222')
         self.tableWidget.setRowCount(0)
         for row_number, row_data in enumerate(resultado):
             self.tableWidget.insertRow(row_number)
@@ -230,26 +235,53 @@ class WindowBuscar(QMainWindow):
                 self.tableWidget.setItem(row_number, column_number, QtWidgets.QTableWidgetItem(str(data)))
         for i in [0, 1, 2, 3, 4, 5, 6, 7]:
             self.tableWidget.resizeColumnToContents(i)
+        conn.close()
 
     def cargarIdCliente(self):
         idCli = self.lineEdit_2.text()  # id de cliente
-
         conn = conexion()
         cursor = conn.cursor()
         numeroDeCuit = cursor.execute("select 'num_cuit' from Clientes where id_cliente==(?);", (idCli,)).fetchall()[0][
             0]  # str
         print(numeroDeCuit)
         print('----------s-s- CUIT  s-s-------------')
-
         conn = conexion()
         cursor = conn.cursor()
-
-        trabajosDeCuit=cursor.execute('select * from Trabajos where num_cuit==(?);', (numeroDeCuit,)).fetchall()
+        trabajosDeCuit = cursor.execute('select * from Trabajos where num_cuit==(?);', (numeroDeCuit,)).fetchall()
         print('-=-=-=-=')
         print(trabajosDeCuit)
         print('-=-=-=-=')
 
-        # print('id de Cliente: ' + idCli)
+        #############MOSTRAR TODOS LOS TRABAJOS DEL CLIENTE
+        conn = conexion()
+        print('mostrar trabajos del cliente cargado')
+
+        # resultado = extraer_todo_base_cliente(conn)
+        consulta = extraer_cuit_del_cliente(conn, idCli)
+        print('-----------###------------')
+        print('-----------###------------')
+        print('-----------###------------')
+        # print(resultado.fetchall()[0][0])
+        cuitCliente = consulta.fetchall()[0][0]
+
+        trabajosRealizados = trabajosRealizadosSegunCuit(conn, cuitCliente)
+        print('-----------###------------')
+        print('-----------###------------')
+        print('-----------###------------')
+        self.tableWidget_3.setColumnCount(8)
+
+        self.tableWidget_3.setHorizontalHeaderLabels(
+            ['id_trabajo', 'tipo_trab', 'factura', 'monto_trab', 'fecha_entreg', 'num_cuit', 'monto_pagado', 'saldo'])
+
+        print('222222222222222222222222')
+        self.tableWidget_3.setRowCount(0)
+        for row_number, row_data in enumerate(trabajosRealizados):
+            self.tableWidget_3.insertRow(row_number)
+            for column_number, data in enumerate(row_data):
+                self.tableWidget_3.setItem(row_number, column_number, QtWidgets.QTableWidgetItem(str(data)))
+        for i in [0, 1, 2, 3, 4, 5, 6, 7]:
+            self.tableWidget_3.resizeColumnToContents(i)
+        conn.close()
 
     def actualizar_tableWidget_Automaticamente(self):
         print('mama mia!')
@@ -276,7 +308,13 @@ class WindowBuscar(QMainWindow):
             conn = conexion()
             cursor = conn.cursor()
             cantidadDeFilas = cursor.execute('SELECT COUNT(ALL) from Clientes;').fetchall()[0]
-            self.tableWidget.setRowCount(cantidadDeFilas)
+            print(cantidadDeFilas)
+            print(type(cantidadDeFilas))
+            if type(cantidadDeFilas) == tuple:
+                cantidadDeFilas = cantidadDeFilas[0]
+                self.tableWidget.setRowCount(cantidadDeFilas)
+            else:
+                self.tableWidget.setRowCount(cantidadDeFilas)
 
             # conn = conexion()
             # cursor = conn.cursor()
@@ -360,13 +398,86 @@ class WindowBuscar(QMainWindow):
 
     def pagarUnTrabajo(self):
         print('pagarUnTrabajo')
+        idTrabajo = self.lineEdit_10.text()
+        monto = self.lineEdit_11.text()
+        pagarUnMonto(idTrabajo, monto)
 
+        conn = conexion()
+        # print('mostrar trabajos del cliente cargado')
+
+        # resultado = extraer_todo_base_cliente(conn)
+        # consulta = extraer_cuit_del_cliente(conn, idCli)
+        # print('-----------###------------')
+        # print('-----------###------------')
+        # print('-----------###------------')
+        # print(resultado.fetchall()[0][0])
+        # cuitCliente = consulta.fetchall()[0][0]
+
+        cuitCliente = cauitSegunIdTrabajo(conn, idTrabajo)
+
+        trabajosRealizados = trabajosRealizadosSegunCuit(conn, cuitCliente)
+        print('-----------###------------')
+        print('-----------###------------')
+        print('-----------###------------')
+        self.tableWidget_3.setColumnCount(8)
+
+        self.tableWidget_3.setHorizontalHeaderLabels(
+            ['id_trabajo', 'tipo_trab', 'factura', 'monto_trab', 'fecha_entreg', 'num_cuit', 'monto_pagado', 'saldo'])
+        self.tableWidget_3.setRowCount(0)
+
+        for row_number, row_data in enumerate(trabajosRealizados):
+            self.tableWidget_3.insertRow(row_number)
+            for column_number, data in enumerate(row_data):
+                self.tableWidget_3.setItem(row_number, column_number, QtWidgets.QTableWidgetItem(str(data)))
+        for i in [0, 1, 2, 3, 4, 5, 6, 7]:
+            self.tableWidget_3.resizeColumnToContents(i)
+        conn.close()
+
+
+###############################################################
 
 class WindowGanan(QMainWindow):
     def __init__(self):
         super().__init__()
         uic.loadUi('ganancias.ui', self)
         self.setWindowTitle('Ganancias')
+        # self.dateEdit.setDisplayFormat("dd.MM.yyyy")
+        # self.dateEdit.dateChanged.connect(self.printttt)
+        self.pushButton.clicked.connect(self.reporte)
+
+    def reporte(self):
+        print('generar reporte')
+
+        dia = self.dateEdit.date().day()
+        mes = self.dateEdit.date().month()
+        anio = self.dateEdit.date().year()
+        print(dia, mes, anio)
+        fechaNueva1 = str(dia) + '/' + str(mes) + '/' + str(anio)
+
+        dia = self.dateEdit_2.date().day()
+        mes = self.dateEdit_2.date().month()
+        anio = self.dateEdit_2.date().year()
+        print(dia, mes, anio)
+        fechaNueva2 = str(dia) + '/' + str(mes) + '/' + str(anio)
+
+        print(fechaNueva1<fechaNueva2)
+
+        conn=conexion()
+
+        #sumar todos los montosPagados
+        ingresoBruto=calcularIngresoBruto(conn,fechaNueva1,fechaNueva2)
+
+    def printttt(self):
+        # print('qweqweqwe')
+        # fecha=self.dateEdit.date()
+        # fecha = self.dateEdit.displayFormat()
+        dia = self.dateEdit.date().day()
+        mes = self.dateEdit.date().month()
+        anio = self.dateEdit.date().year()
+        print(dia, mes, anio)
+        print(type(dia))
+
+        # print(fecha)
 
 
 class WindowInsu(QMainWindow):
@@ -374,6 +485,20 @@ class WindowInsu(QMainWindow):
         super().__init__()
         uic.loadUi('insumos.ui', self)
         self.setWindowTitle('Insumos')
+        self.btnRegistrar.clicked.connect(self.registrarInsumo)
+
+        def registrarInsumo(self):
+            descripcion = self.nombap.text()
+            marca = self.nombap_2.text()
+            cantidad = self.nombap_3.text()
+            precioUnitario = self.nombap_4.text()
+            fechaCompra = self.nombap_5.text()
+
+            dato = [descripcion, marca, cantidad, precioUnitario, fechaCompra]
+            respuesta = insertar_base_insumo(dato)
+            self.nombap.setText("")
+            self.nombap_2.setText("")
+            self.nomba
 
 
 class WindowAlerta(QMainWindow):
@@ -396,11 +521,13 @@ class WindowTrabajoGuardado(QMainWindow):
         uic.loadUi('gui_trabajoGuardado.ui', self)
         self.setWindowTitle('trabajo guardado')
 
+
 class WindowAlertaClienteNoRegistrado(QMainWindow):
     def __init__(self):
         super().__init__()
         uic.loadUi('gui_noHayClienteRegistrado.ui', self)
         self.setWindowTitle('trabajo guardado')
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
