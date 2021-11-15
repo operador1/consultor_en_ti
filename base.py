@@ -65,7 +65,7 @@ def insertar_base_cliente(dato):  # [nombre, documento, cuit, celular, direccion
         print("error del tipo ValueError")
     except sqlite3.IntegrityError:
         print("error IntegrityError, valores repetidos")
-        return 'error'
+        return 'error, valores repetidos'
 
 
 def db_trabajo():

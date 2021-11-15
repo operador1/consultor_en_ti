@@ -54,15 +54,18 @@ class WindowRegistro(QMainWindow):
         # idCliente = list(consulta2[0])[0] + 1 #int:
         ######################
         dato = [nombre, documento, cuit, celular, direccion, localidad, sexo]
-        insertar_base_cliente(dato)
-        self.nombap.setText("")
-        self.numdoc.setText("")
-        self.numcuit.setText("")
-        self.numcel.setText("")
-        self.direc.setText("")
-        self.loc.setText("")
-        self.sexo.setCurrentIndex(0)
-        guiClienteGuardado.show()
+        respuesta=insertar_base_cliente(dato)
+        if respuesta=='error, valores repetidos':
+            guiAlerta.show()
+        else:
+            self.nombap.setText("")
+            self.numdoc.setText("")
+            self.numcuit.setText("")
+            self.numcel.setText("")
+            self.direc.setText("")
+            self.loc.setText("")
+            self.sexo.setCurrentIndex(0)
+            guiClienteGuardado.show()
 
 
 class WindowCargar(QMainWindow):  # registrar trabajo
