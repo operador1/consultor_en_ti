@@ -22,7 +22,8 @@ def db_cliente():
 		[num_cel] INTEGER  NOT NULL,
 		[direc] VARCHAR(55)  NULL,
 		[localidad] VARCHAR(30)  NULL,
-		[sexo] VARCHAR(10)  NULL
+		[sexo] VARCHAR(10)  NULL,
+		[borrar] VARCHAR(10)  NULL
 		); 
 		""")
     conn.commit()
@@ -34,22 +35,21 @@ def buscarClienteSegunId(idCliente):
         conn = conexion()
         cursor = conn.cursor()
         dato = cursor.execute(
-            "SELECT nom_ape,num_doc,num_cuit,num_cel,direc,localidad,sexo FROM Clientes WHERE id_cliente==(?);",
-            idCliente, )
+            "SELECT nom_ape,num_doc,num_cuit,num_cel,direc,localidad,sexo FROM Clientes WHERE id_cliente=(?);",
+            (idCliente,))
         return dato
     except Error:
         print("error detectado")
         return "NO"
 
 
-def guardarClienteModificado(dato):
-    conn = conexion()
+def guardarClienteModificado(conn, dato):
+    # conn = conexion()
     cursor = conn.cursor()
     cursor.execute(
         "UPDATE Clientes SET nom_ape=(?),num_doc=(?),num_cuit=(?),num_cel=(?),direc=(?),localidad=(?),sexo=(?) WHERE id_cliente==(?)",
         dato)
     conn.commit()
-    conn.close()
 
 
 def insertar_base_cliente(dato):  # [nombre, documento, cuit, celular, direccion,localidad,sexo]
@@ -57,7 +57,7 @@ def insertar_base_cliente(dato):  # [nombre, documento, cuit, celular, direccion
         conn = conexion()
         cursor = conn.cursor()
         cursor.execute(
-            "INSERT INTO Clientes(nom_ape, num_doc, num_cuit, num_cel, direc, localidad, sexo) VALUES (?,?,?,?,?,?,?)",
+            "INSERT INTO Clientes(nom_ape, num_doc, num_cuit, num_cel, direc, localidad, sexo,borrar) VALUES (?,?,?,?,?,?,?,?)",
             dato)
         conn.commit()
         conn.close()
@@ -79,7 +79,7 @@ def db_trabajo():
 		[factura] VARCHAR(55)  NOT NULL,
 		[monto_trab] VARCHAR(55)  NULL,
 		[fecha_entreg] VARCHAR(55)  NULL,
-		[num_cuit] VARCHAR(55)  UNIQUE NOT NULL,
+		[num_cuit] VARCHAR(55) NOT NULL,
 		[monto_pagado] VARCHAR(55) NULL,
 		[saldo] VARCHAR(55) NULL
 		);
@@ -137,31 +137,59 @@ def guardarSaldoDeTrabajo(monto):
     pass
 
 
-def extraer_base_cliente_nomape_numcuit(dato):  # dato=['%' + nombreApellido + '%','%' + numCuit + '%']
+def extraer_base_cliente_nomape_numcuit(conn, dato):  # dato=['%' + nombreApellido + '%','%' + numCuit + '%']
     try:
-        conn = conexion()
         cursor = conn.cursor()
-        print('---------------')
-        print(dato)
         # print('----select * from clientes where nom_ape like 'a%';-----------')
-        resultado = cursor.execute("SELECT OR IGNORE * FROM Clientes WHERE nom_ape like ? AND num_cuit like ?",
-                                   dato, )
-        conn.close()
+        resultado = cursor.execute(
+            "SELECT num_cuit,num_doc,nom_ape,num_cel,direc,localidad,sexo FROM Clientes WHERE nom_ape like ? AND num_cuit like ?",
+            dato, )
+        # cuit ~~ documento ~~ nombre y apellido ~~  celular ~~ direccion ~~~ localidad ~~ sexo    7 columnado
+        # conn.close()
         return resultado
     except Error:
         print('error en extraer_base_cliente_nomape_numcuit')
         return 'error'
 
 
-def extraer_base_cliente_nomape(dato):  # dato=['%' + nombreApellido + '%']
+def extraer_base_cliente_nomape3(conn, dato):
     try:
-        conn = conexion()
         cursor = conn.cursor()
-        resultado = cursor.execute("SELECT OR IGNORE * FROM Clientes WHERE nom_ape like ?", dato, )
-        conn.close()
+        print(dato)
+        resultado = cursor.execute(
+            "SELECT num_cuit,num_doc,nom_ape,num_cel,direc,localidad,sexo FROM Clientes WHERE nom_ape like ? or num_cuit like ?;",
+            dato, )
+
+        return resultado
+    except Error:
+        print('error fatal')
+
+
+def extraer_base_cliente_nomape(conn, dato):  # dato=['%' + nombreApellido + '%']
+    try:
+        cursor = conn.cursor()
+        print(dato)
+        datoNuevo = [dato[0], '%2%']
+        print(datoNuevo)
+
+        resultado = cursor.executescript(
+            "SELECT num_cuit,num_doc,nom_ape,num_cel,direc,localidad,sexo FROM Clientes WHERE nom_ape like ? and num_cuit like ?;",
+            datoNuevo, )
         return resultado
     except Error:
         print('error en extraer_base_cliente_nomape_numcuit')
+        return 'error'
+    # try:
+    #     conn = conexion()
+    #     cursor = conn.cursor()
+    #     resultado = cursor.execute("SELECT OR IGNORE * FROM Clientes WHERE nom_ape like ?", dato, )
+    # resultado = cursor.execute("SELECT OR IGNORE num_cuit,num_doc,nom_ape,num_cel,direc,localidad,sexo FROM Clientes WHERE nom_ape like ?", dato, )
+    # print("--------klklklklk----------")
+    #
+    # conn.close()
+    # return resultado
+    # except Error:
+    #     print('error en extraer_base_cliente_nomape_numcuit')
 
 
 def extraer_base_cliente_numcuit(dato):  # dato=['%' + nombreApellido + '%','%' + numCuit + '%']
@@ -179,14 +207,6 @@ def extraer_base_cliente_numcuit(dato):  # dato=['%' + nombreApellido + '%','%' 
         print('error en extraer_base_cliente_nomape_numcuit')
 
 
-def extraer_base_cliente_nomape(dato):  # dato=['%' + nombreApellido + '%']
-    conn = conexion()
-    cursor = conn.cursor()
-    resultado = cursor.execute("SELECT * FROM Clientes WHERE nom_ape like ?", (dato,)).fetchall()
-    conn.close()
-    return resultado
-
-
 def extraer_base_cliente_numcuit(dato):  # dato=['%' + numCuit + '%']
     try:
         conn = conexion()
@@ -201,9 +221,10 @@ def extraer_base_cliente_numcuit(dato):  # dato=['%' + numCuit + '%']
 
 def extraer_todo_base_cliente(conn):
     cursor = conn.cursor()
-    resultado = cursor.execute("SELECT * FROM Clientes;")
+    # resultado = cursor.execute("SELECT * FROM Clientes;")
+    resultado2 = cursor.execute("SELECT num_cuit,num_doc,nom_ape,num_cel,direc,localidad,sexo FROM Clientes where borrar='no';")
 
-    return resultado
+    return resultado2
 
 
 def extraer_cuit_del_cliente(conn, idCli):
@@ -261,17 +282,52 @@ def cauitSegunIdTrabajo(conn, idTrabajo):
     return cuit
 
 
-def calcularIngresoBruto(conn, f1, f2):
+def calcularIngresoBruto(conn):
     cursor = conn.cursor()
-    fechas = [f1, f2]
-    listaMontoPagado = cursor.execute('select monto_pagado from Trabajos where monto_pagado between (?) and (?)',
-                                      fechas).fetchall()
-    listaMontoPagado2=cursor.execute('select monto_pagado from Trabajos').fetchall()
-    #select monto_pagado from Trabajos where monto_pagado between (?f1) and (?f2)
+    # fechas = [f1, f2]
+    # listaMontoPagado = cursor.execute('select monto_pagado from Trabajos where monto_pagado between (?) and (?)',
+    #                                   fechas).fetchall()
+    # listaMontoPagado2=cursor.execute('select monto_pagado from Trabajos').fetchall()
+    # select monto_pagado from Trabajos where monto_pagado between (?f1) and (?f2)
 
-    print('listaMontoPagado2')
-    print(listaMontoPagado2)
+    respuesta = list(cursor.execute('SELECT monto_pagado FROM Trabajos').fetchall())
+
+    print(respuesta)
+    return respuesta
+
+    # print('listaMontoPagado2')
+    # print(listaMontoPagado2)
 
 
-def insertar_base_insumo(dato):
-    pass
+def insertar_base_insumo(dato):  # [descripcion, marca, cantidad, precioUnitario, fechaCompra]
+    conn = conexion()
+    cursor = conn.cursor()
+    cursor.execute(
+        "INSERT INTO Insumos(descrip, marca, cant, precio_uni, fecha_compra,total) VALUES (?,?,?,?,?,?)",
+        dato)
+    conn.commit()
+    conn.close()
+
+
+def db_insumos():
+    conn = conexion()
+    cursor = conn.cursor()
+    cursor.executescript("""
+        CREATE TABLE IF NOT EXISTS [Insumos] (
+        [id_insumo] INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT,
+        [descrip] VARCHAR(55)  NULL,
+        [marca] VARCHAR(55)  NULL,
+        [cant] VARCHAR(20)  NULL,
+        [precio_uni] VARCHAR(20)  NULL,
+        [fecha_compra] VARCHAR(20)  NULL,
+        [total] VARCHAR(20)  NULL
+        );
+        """)
+    conn.commit()
+    conn.close()
+
+
+def extraerListaInsumos(conn):
+    cursor = conn.cursor()
+    lista = cursor.execute("select total from Insumos;").fetchall()
+    return lista

@@ -1,18 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="fcb31891-22b7-4e8a-a114-1803a4e37a67" name="Changes" comment="mejorando el codigo 2">
+    <list default="true" id="fcb31891-22b7-4e8a-a114-1803a4e37a67" name="Changes" comment="mejorando el codigo 2 linea 57 mainggg">
+      <change afterPath="$PROJECT_DIR$/logo.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/logo.qrc" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/base.py" beforeDir="false" afterPath="$PROJECT_DIR$/base.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/buscar_cliente.ui" beforeDir="false" afterPath="$PROJECT_DIR$/buscar_cliente.ui" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ganancias.ui" beforeDir="false" afterPath="$PROJECT_DIR$/ganancias.ui" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui_clienteGuardado.ui" beforeDir="false" afterPath="$PROJECT_DIR$/gui_clienteGuardado.ui" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui_noHayClienteRegistrado.ui" beforeDir="false" afterPath="$PROJECT_DIR$/gui_noHayClienteRegistrado.ui" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui_trabajoGuardado.ui" beforeDir="false" afterPath="$PROJECT_DIR$/gui_trabajoGuardado.ui" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/insumos.ui" beforeDir="false" afterPath="$PROJECT_DIR$/insumos.ui" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main_ui.ui" beforeDir="false" afterPath="$PROJECT_DIR$/main_ui.ui" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/registrar_cliente.ui" beforeDir="false" afterPath="$PROJECT_DIR$/registrar_cliente.ui" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/registrar_trabajo.ui" beforeDir="false" afterPath="$PROJECT_DIR$/registrar_trabajo.ui" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
   </component>
   <component name="ProjectId" id="20eIlrFq2QcmLUv4XEmu7aakSPk" />
   <component name="ProjectViewState">
@@ -22,8 +48,8 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../EpicoAutos" />
-    <property name="settings.editor.selected.configurable" value="org.jetbrains.plugins.github.ui.GithubSettingsConfigurable" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Documents/GitHub/EpicoAutos" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="RunManager">
     <configuration name="anto" type="PythonConfigurationType" factoryName="Python">
@@ -33,7 +59,7 @@
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
-      <option name="SDK_HOME" value="C:\ProgramData\Anaconda3\envs\desarrollador\python.exe" />
+      <option name="SDK_HOME" value="C:\ProgramData\Anaconda3\python.exe" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
@@ -92,7 +118,28 @@
       <option name="project" value="LOCAL" />
       <updated>1636936337716</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="mejorando el codigo 2 linea 57 main">
+      <created>1636947798613</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1636947798613</updated>
+    </task>
+    <task id="LOCAL-00007" summary="mejorando el codigo 2 linea 57 main">
+      <created>1636948350643</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1636948350643</updated>
+    </task>
+    <task id="LOCAL-00008" summary="mejorando el codigo 2 linea 57 mainggg">
+      <created>1636955654719</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1636955654719</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -112,7 +159,9 @@
     <MESSAGE value="modificar main" />
     <MESSAGE value="mejorando el codigo" />
     <MESSAGE value="mejorando el codigo 2" />
-    <option name="LAST_COMMIT_MESSAGE" value="mejorando el codigo 2" />
+    <MESSAGE value="mejorando el codigo 2 linea 57 main" />
+    <MESSAGE value="mejorando el codigo 2 linea 57 mainggg" />
+    <option name="LAST_COMMIT_MESSAGE" value="mejorando el codigo 2 linea 57 mainggg" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

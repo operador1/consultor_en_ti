@@ -140,7 +140,7 @@
      </rect>
     </property>
     <property name="inputMask">
-     <string>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx; </string>
+     <string>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="nombap_2">
@@ -153,7 +153,7 @@
      </rect>
     </property>
     <property name="inputMask">
-     <string>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx; </string>
+     <string>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="nombap_3">
@@ -166,7 +166,7 @@
      </rect>
     </property>
     <property name="inputMask">
-     <string>9999; </string>
+     <string>9999</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="nombap_4">
@@ -179,7 +179,7 @@
      </rect>
     </property>
     <property name="inputMask">
-     <string>$9999999 ; </string>
+     <string>$9999999 </string>
     </property>
    </widget>
    <widget class="QLineEdit" name="nombap_5">
@@ -192,20 +192,7 @@
      </rect>
     </property>
     <property name="inputMask">
-     <string>99-99-99; </string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_7">
-    <property name="geometry">
-     <rect>
-      <x>50</x>
-      <y>500</y>
-      <width>46</width>
-      <height>13</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>TextLabel</string>
+     <string>99-99-99</string>
     </property>
    </widget>
    <widget class="QPushButton" name="btnCancelar">

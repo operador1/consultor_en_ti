@@ -1,9 +1,12 @@
 import sys
 from PyQt5 import uic, QtGui
 from PyQt5 import QtWidgets
-from PyQt5.QtWidgets import QMainWindow, QApplication, QDateEdit
+from PyQt5.QtWidgets import QMainWindow, QApplication, QDateEdit, QFrame, QComboBox
 from base import *
+import logo
 
+
+# import time
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -16,19 +19,19 @@ class MainWindow(QMainWindow):
         self.btnInsumos.clicked.connect(self.ventanaInsu)
 
     def ventanaRegistro(self):
-        guiRegistro.show()
+        guiRegistro.showMaximized()
 
     def ventanaCargar(self):
         guiCargar.show()
 
     def ventanaBuscar(self):
-        guiBuscar.show()
+        guiBuscar.showMaximized()
 
     def ventanaGanan(self):
-        guiGanan.show()
+        guiGanan.showMaximized()
 
     def ventanaInsu(self):
-        guiInsu.show()
+        guiInsu.showMaximized()
 
 
 class WindowRegistro(QMainWindow):
@@ -40,35 +43,33 @@ class WindowRegistro(QMainWindow):
 
     def ingresarCliente(self):
         nombre = self.nombap.text()
-        documento = self.numdoc.text()
+        # documento = self.numdoc.text()
         cuit = self.numcuit.text()
+        documento = cuit[3:-2]
         celular = self.numcel.text()
         direccion = self.direc.text()
         localidad = self.loc.text()
         sexo = self.sexo.currentText()
-        ######################
-        # conn = conexion()
-        # cursor = conn.cursor()
-        # consulta2 = cursor.execute("SELECT COUNT(id_cliente) FROM Clientes;").fetchall() # da [(0,)]
-        # conn.close()
-        # idCliente = list(consulta2[0])[0] + 1 #int:
-        ######################
-        dato = [nombre, documento, cuit, celular, direccion, localidad, sexo]
-        respuesta = insertar_base_cliente(dato)
-        if respuesta == 'error, valores repetidos':
-            guiAlerta.show()
+        if (
+                nombre == '' or len(cuit) != 13 or celular == '' or direccion == '' or localidad == '' or sexo == ''):
+            pass
         else:
-            self.nombap.setText("")
-            self.numdoc.setText("")
-            self.numcuit.setText("")
-            self.numcel.setText("")
-            self.direc.setText("")
-            self.loc.setText("")
-            self.sexo.setCurrentIndex(0)
-            guiClienteGuardado.show()
+            borrar = 'no'
+            dato = [nombre, documento, cuit, celular, direccion, localidad, sexo, borrar]
+            respuesta = insertar_base_cliente(dato)
+            if respuesta == 'error, valores repetidos':
+                guiAlerta.show()
+            else:
+                self.nombap.setText("")
+                self.numdoc.setText("")
+                self.numcuit.setText("")
+                self.numcel.setText("")
+                self.direc.setText("")
+                self.loc.setText("")
+                self.sexo.setCurrentIndex(0)
+                guiClienteGuardado.show()
 
 
-# registrar trabajo
 class WindowCargar(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -78,52 +79,71 @@ class WindowCargar(QMainWindow):
         self.tipotrab.setText("")
         self.comboBox.setCurrentIndex(0)
         self.montotrab.setText("")
+        self.pushButton.clicked.connect(self.llenarComboBox)
+        # conn = conexion()
+        # cursor = conn.cursor()
+        # listaDeCuitNombre = cursor.execute('select num_cuit,nom_ape from Clientes').fetchall()
+        # lista1 = []
+        # for i in listaDeCuitNombre:
+        #     lista1.append(i[0] + ' - ' + i[1])
+        #     self.comboBox_2.addItem(i[0] + ' - ' + i[1])
+        # conn.close()
 
-        self.fechaentreg.setText("")  # te vas
-        # self.dateEdit.
+        # self.comboBox_2.currentIndexChanged.connect(self.borrar)
+        # self.comboBox_2.highlighted.connect(self.borrar)
+        # self.comboBox_2.activated.connect(self.borrar)
+        # self.comboBox_2.activated.connect(self.borrar)
+        # self.comboBox_2.currentIndexChanged.connect(self.borrar)
+        # self.comboBox_2.currentIndexChanged.connect(self.borrar)
+        # self.comboBox_2.currentTextChanged.connect(self.borrar)
+        # self.comboBox_2.editTextChanged.connect(self.borrar)
+        # self.comboBox_2.highlighted.connect(self.borrar)
+        # self.comboBox_2.highlighted.connect(self.borrar)
+        # self.comboBox_2.textActivated.connect(self.borrar)
+        # self.comboBox_2.textHighlighted.connect(self.borrar)
 
-        self.cuitsolici.setText("")
+    def borrar(self):
+        print('HOLA MUNDO!')
+
+    def llenarComboBox(self):
+        # self.comboBox_2.addItem('')
+        self.comboBox_2.clear()
+
+        # self.comboBox_2.removeItem(20)
+        conn = conexion()
+        cursor = conn.cursor()
+        listaDeCuitNombre = cursor.execute("select num_cuit,nom_ape from Clientes where borrar='no'").fetchall()
+        lista1 = []
+        for i in listaDeCuitNombre:
+            lista1.append(i[0] + ' - ' + i[1])
+            self.comboBox_2.addItem(i[0] + ' - ' + i[1])
+        conn.close()
 
     def ingresarTrabajo(self):
         tipo = self.tipotrab.text().strip()
         factura = self.comboBox.currentText().strip()
         monto = self.montotrab.text().strip()
-
-        fecha = self.fechaentreg.text().strip()
-
         dia = self.dateEdit.date().day()
         mes = self.dateEdit.date().month()
         anio = self.dateEdit.date().year()
-        print(dia , mes, anio)
         fechaNueva = str(dia) + '/' + str(mes) + '/' + str(anio)
-
-        cuit = self.cuitsolici.text().strip()
-        # dato = [tipo, factura, monto, fecha, cuit]
-        dato = [tipo, factura, monto, fechaNueva, cuit]
-        # saldo=monto
-        ############PROBLEMA usar cuit como id del cliente
-
-        respuesta = existeCuitParaTrabajo(dato)  # 'existe' o 'no existe'
-        print('----------respuesta-------------')
-        print(respuesta)
-
-        if respuesta == 'existe':
-
-            guardoTrabajoSegunCuit2(dato)
-            guiTrabajoGuardado.show()
-            # guardarSaldoDeTrabajo(saldo)
-            self.tipotrab.setText("")
-            self.comboBox.setCurrentIndex(0)
-            self.montotrab.setText("")
-            self.fechaentreg.setText("")
-            self.cuitsolici.setText("")
-        elif respuesta == 'no existe':
-            gui_noHayClienteRegistrado.show()
-            self.tipotrab.setText("")
-            self.comboBox.setCurrentIndex(0)
-            self.montotrab.setText("")
-            self.fechaentreg.setText("")
-            self.cuitsolici.setText("")
+        cuitsolici = self.comboBox_2.currentText()[0:13]
+        if (tipo == '' or monto.replace('$', '') == ''):
+            pass
+        else:
+            dato = [tipo, factura, monto, fechaNueva, cuitsolici]
+            respuesta = existeCuitParaTrabajo(dato)
+            if respuesta == 'existe':
+                guardoTrabajoSegunCuit2(dato)
+                guiTrabajoGuardado.show()
+                self.tipotrab.setText("")
+                self.comboBox.setCurrentIndex(0)
+                self.montotrab.setText("")
+            elif respuesta == 'no existe':
+                gui_noHayClienteRegistrado.show()
+                self.tipotrab.setText("")
+                self.comboBox.setCurrentIndex(0)
+                self.montotrab.setText("")
 
 
 class WindowBuscar(QMainWindow):
@@ -132,52 +152,151 @@ class WindowBuscar(QMainWindow):
         uic.loadUi('buscar_cliente.ui', self)
         self.setWindowTitle('Buscar un cliente')
         self.pushButton.clicked.connect(self.mostrartodo)
-        self.pushButton_4.clicked.connect(self.pagarUnTrabajo)
-
         self.pushButton_2.clicked.connect(self.cargarIdCliente)
-        self.tableWidget.setColumnCount(10)
+        self.pushButton_6.clicked.connect(self.cargarIdCliente)
+
+        ####Borrar cliente - conectar boton
+        self.pushButton_2.clicked.connect(self.cargarClienteParaBorrar)
+        self.pushButton_6.clicked.connect(self.borrarCliente)
+
+        self.tableWidget.setColumnCount(7)
         self.pushButton_3.clicked.connect(self.guardarModificacion)
-
-        self.lineEdit.cursorPositionChanged.connect(self.actualizar_tableWidget_Automaticamente)
-        self.lineEdit_3.cursorPositionChanged.connect(self.actualizar_tableWidget_Automaticamente)
-
+        self.comboBox.currentTextChanged.connect(self.seleccionarCuit)
+        self.pushButton_5.clicked.connect(self.actualizarTabla)
         self.tableWidget.setHorizontalHeaderLabels(
-            ['id', 'nom_ape', 'num_doc', 'num_cuit', 'num_cel', 'direc', 'localidad', 'sexo'])
+            ["Cuit", "Documento", "Nombre y apellido", "Celular", "Direccion", "Localidad", "Sexo"])
         for i in [0, 1, 2, 3, 4, 5, 6, 7]:
             self.tableWidget.resizeColumnToContents(i)
         self.pushButton_2.clicked.connect(self.cargarCliente)
-        # cargarIdCliente
+
+    def cargarClienteParaBorrar(self):
+        nombreCliente = self.comboBox.currentText()[15:]
+        print('nombreCliente')
+        print(nombreCliente)
+        cuit = self.comboBox.currentText()[13:]
+        print('cuit')
+        print(cuit)
+        self.label_2.setText('Desea borrar al cliente %s' % nombreCliente)
+        self.label_2.adjustSize()  # ajustar tamaño a texto
+
+    def borrarCliente(self):
+        try:
+
+            nombreCliente = self.comboBox.currentText()[15:]
+            # print('nombreCliente')
+            # print(nombreCliente)
+            cuit = self.comboBox.currentText()[0:13]
+            # print('cuit')
+            # print(cuit)
+            conn = conexion()
+            cursor = conn.cursor()
+            # borrar = 'si'
+            cursor.execute("update Clientes set borrar='si' where num_cuit=?;", (cuit,))
+            conn.commit()
+            print('logrado')
+            conn.close()
+        except Error:
+            print('ups!')
+        # self.label_2.setText('Desea borrar al cliente %s' % nombreCliente)
+        # self.label_2.adjustSize()  # ajustar tamaño a texto
+
+    def seleccionarCuit(self):
+        pass
+
+    def actualizarTabla(self):
+        self.tableWidget.setRowCount(0)
+        nomApe = self.lineEdit.text().strip()
+        cuit = self.lineEdit_3.text().strip()
+        conn = conexion()
+        datoNombre = '%' + nomApe + '%'
+        datoCuit = '%' + cuit + '%'
+        dato = [datoNombre, datoCuit]
+        cursor = conn.cursor()
+
+        if nomApe != '' and cuit != '':  # primer EVENTO
+            resultado = cursor.execute(
+                "SELECT num_cuit,num_doc,nom_ape,num_cel,direc,localidad,sexo FROM Clientes WHERE nom_ape like ? AND num_cuit like ? and borrar='no';",
+                dato)
+            for row_number, row_data in enumerate(resultado):
+                self.tableWidget.insertRow(row_number)
+                for column_number, data in enumerate(row_data):
+                    self.tableWidget.setItem(row_number, column_number, QtWidgets.QTableWidgetItem(str(data)))
+            for i in [0, 1, 2, 3, 4, 5, 6]:
+                self.tableWidget.resizeColumnToContents(i)
+            # cantidadFilas = cursor.execute(
+            #     "SELECT num_cuit,num_doc,nom_ape,num_cel,direc,localidad,sexo FROM Clientes WHERE nom_ape like ? AND num_cuit like ?;",
+            #     dato).fetchall()
+            cantidadFilas = cursor.execute(
+                "SELECT num_cuit,nom_ape FROM Clientes WHERE nom_ape like ? AND num_cuit like ? and borrar='no';",
+                dato).fetchall()
+            # self.tableWidget.setRowCount(len(cantidadFilas))
+            self.llenarComboBox(cantidadFilas=cantidadFilas)
+
+        elif nomApe != '' and cuit == '':
+            resultado = cursor.execute(
+                "SELECT num_cuit,num_doc,nom_ape,num_cel,direc,localidad,sexo FROM Clientes WHERE nom_ape like ? and borrar='no';",
+                (datoNombre,))
+            for row_number, row_data in enumerate(resultado):
+                self.tableWidget.insertRow(row_number)
+                for column_number, data in enumerate(row_data):
+                    self.tableWidget.setItem(row_number, column_number, QtWidgets.QTableWidgetItem(str(data)))
+            for i in [0, 1, 2, 3, 4, 5, 6]:
+                self.tableWidget.resizeColumnToContents(i)
+            cantidadFilas = cursor.execute(
+                "SELECT num_cuit,nom_ape FROM Clientes WHERE nom_ape like ? and borrar='no';",
+                (datoNombre,)).fetchall()
+            # self.tableWidget.setRowCount(len(cantidadFilas))
+            self.llenarComboBox(cantidadFilas=cantidadFilas)
+        elif nomApe == '' and cuit != '':
+            resultado = cursor.execute(
+                "SELECT num_cuit,num_doc,nom_ape,num_cel,direc,localidad,sexo FROM Clientes WHERE num_cuit like ? and borrar='no';",
+                (datoCuit,))
+            for row_number, row_data in enumerate(resultado):
+                self.tableWidget.insertRow(row_number)
+                for column_number, data in enumerate(row_data):
+                    self.tableWidget.setItem(row_number, column_number, QtWidgets.QTableWidgetItem(str(data)))
+            for i in [0, 1, 2, 3, 4, 5, 6]:
+                self.tableWidget.resizeColumnToContents(i)
+            cantidadFilas = cursor.execute(
+                "SELECT num_cuit,nom_ape FROM Clientes WHERE num_cuit like ? and borrar='no';",
+                (datoCuit,)).fetchall()
+            # self.tableWidget.setRowCount(len(cantidadFilas))
+            self.llenarComboBox(cantidadFilas=cantidadFilas)
+        if nomApe == '' and cuit == '':
+            conn.close()
+
+    def llenarComboBox(self, cantidadFilas):
+        self.comboBox.clear()
+        self.tableWidget.setRowCount(len(cantidadFilas))
+        for i in cantidadFilas:
+            print(cantidadFilas)
+            # self.comboBox.clear()
+            self.comboBox.addItem(i[0] + ' - ' + i[1])
 
     def guardarModificacion(self):
-
-        self.lineEdit_4.setText("")
-        self.lineEdit_5.setText("")
-        self.lineEdit_6.setText("")
-        self.lineEdit_7.setText("")
-        self.lineEdit_8.setText("")
-        self.lineEdit_9.setText("")
-        nombreApellidoNuevo = self.lineEdit_4.text()
-        documentoNuevo = self.lineEdit_5.text()
-        CuitNuevo = self.lineEdit_6.text()
-        CelularNuevo = self.lineEdit_7.text()
-        DireccionNueva = self.lineEdit_8.text()
-        LocalidadNueva = self.lineEdit_9.text()
-        sexoIndice = self.sexo.currentText()
-        idCliente = self.lineEdit_2.text()
-        print(sexoIndice)
-        if sexoIndice == 'FEMENINO':
-            sexoNuevo = 'F'
-        else:
-            sexoNuevo = 'M'
-
+        nombreApellidoNuevo = self.lineEdit_4.text()  ##
+        documentoNuevo = self.lineEdit_5.text()  ##
+        CuitNuevo = self.lineEdit_6.text()  ##
+        CelularNuevo = self.lineEdit_7.text()  ##
+        DireccionNueva = self.lineEdit_8.text()  ##
+        LocalidadNueva = self.lineEdit_9.text()  ##
+        sexoIndice = self.sexo.currentText()  ##
+        cuit = self.comboBox.currentText()
+        conn = conexion()
+        cursor = conn.cursor()
+        idCliente = \
+            cursor.execute('select id_cliente from Clientes where num_cuit=(?) and borrar="no";',
+                           (cuit[0:13],)).fetchall()[0][0]
         if (
-                nombreApellidoNuevo.strip() == "" or documentoNuevo.strip() == "" or CuitNuevo.strip() == "" or CelularNuevo.strip() == "" or idCliente.strip() == ""):
+                nombreApellidoNuevo.strip() == "" or documentoNuevo.strip() == "" or CuitNuevo.strip() == ""):
             pass
         else:
-            clienteModificado = [nombreApellidoNuevo, int(documentoNuevo), CuitNuevo, int(CelularNuevo), DireccionNueva,
-                                 LocalidadNueva, sexoNuevo, int(idCliente)]
+            clienteModificado = [nombreApellidoNuevo, int(documentoNuevo), CuitNuevo, int(CelularNuevo),
+                                 DireccionNueva,
+                                 LocalidadNueva, sexoIndice, int(idCliente)]
             conn = conexion()
             guardarClienteModificado(conn, clienteModificado)
+            conn.close()
             self.lineEdit_4.setText("")
             self.lineEdit_5.setText("")
             self.lineEdit_6.setText("")
@@ -187,11 +306,15 @@ class WindowBuscar(QMainWindow):
             self.mostrartodo()
 
     def cargarCliente(self):  # hola
-
-        idCliente = self.lineEdit_2.text().strip()
-        if idCliente == "":
+        cuit = self.comboBox.currentText()
+        if cuit == '':
             pass
         else:
+            conn = conexion()
+            cursor = conn.cursor()
+            idCliente = \
+                cursor.execute('select id_cliente from Clientes where num_cuit=(?) and borrar="no";', (cuit[0:13],)).fetchall()[0][
+                    0]
             resultado = buscarClienteSegunId(idCliente)
             if resultado == "NO":
                 pass
@@ -211,23 +334,19 @@ class WindowBuscar(QMainWindow):
     def buscarCliente(self):
         nombreApellido = self.lineEdit.text()
         numCuit = self.lineEdit_3.text()
-        print('nombre y apellido: ' + nombreApellido + '\nnumero de cuit: ' + numCuit)
-        # dato = [nombreApellido, numCuit]
         dato = ['%' + nombreApellido + '%', '%' + numCuit + '%']
-        # dato = ['%' + nombreApellido + '%']
-        # if nombreApellido.strip()=='%' and numCuit.strip()==":
         if nombreApellido.strip() == '%' or numCuit.strip() == '%':
-            print('falla')
+            pass
         else:
             self.actualizar_tableWidget(dato)
 
     def mostrartodo(self):
         conn = conexion()
-        print('mostrartodo')
-
         resultado = extraer_todo_base_cliente(conn)
         self.tableWidget.setColumnCount(8)
-        print('222222222222222222222222')
+        self.tableWidget.setColumnCount(7)
+        self.tableWidget.setHorizontalHeaderLabels(
+            ["Cuit", "Documento", "Nombre y apellido", "Celular", "Direccion", "Localidad", "Sexo"])
         self.tableWidget.setRowCount(0)
         for row_number, row_data in enumerate(resultado):
             self.tableWidget.insertRow(row_number)
@@ -235,47 +354,26 @@ class WindowBuscar(QMainWindow):
                 self.tableWidget.setItem(row_number, column_number, QtWidgets.QTableWidgetItem(str(data)))
         for i in [0, 1, 2, 3, 4, 5, 6, 7]:
             self.tableWidget.resizeColumnToContents(i)
+        conn = conexion()
+        cursor = conn.cursor()
+        cantidadFilas = cursor.execute('select num_cuit,nom_ape from Clientes where borrar="no"').fetchall()
+        self.llenarComboBox(cantidadFilas=cantidadFilas)
         conn.close()
 
     def cargarIdCliente(self):
-        idCli = self.lineEdit_2.text()  # id de cliente
-        conn = conexion()
+        cuitNombre = self.comboBox.currentText()
+        conn = conexion()  # -------------- < - > --------------
+        numeroDeCuit = cuitNombre[0:13]
         cursor = conn.cursor()
-        numeroDeCuit = cursor.execute("select 'num_cuit' from Clientes where id_cliente==(?);", (idCli,)).fetchall()[0][
-            0]  # str
-        print(numeroDeCuit)
-        print('----------s-s- CUIT  s-s-------------')
-        conn = conexion()
-        cursor = conn.cursor()
-        trabajosDeCuit = cursor.execute('select * from Trabajos where num_cuit==(?);', (numeroDeCuit,)).fetchall()
-        print('-=-=-=-=')
-        print(trabajosDeCuit)
-        print('-=-=-=-=')
-
-        #############MOSTRAR TODOS LOS TRABAJOS DEL CLIENTE
-        conn = conexion()
-        print('mostrar trabajos del cliente cargado')
-
-        # resultado = extraer_todo_base_cliente(conn)
-        consulta = extraer_cuit_del_cliente(conn, idCli)
-        print('-----------###------------')
-        print('-----------###------------')
-        print('-----------###------------')
-        # print(resultado.fetchall()[0][0])
-        cuitCliente = consulta.fetchall()[0][0]
-
-        trabajosRealizados = trabajosRealizadosSegunCuit(conn, cuitCliente)
-        print('-----------###------------')
-        print('-----------###------------')
-        print('-----------###------------')
+        trabajosSegunCuit = cursor.execute(
+            'select id_trabajo, tipo_trab,factura,monto_trab,fecha_entreg,num_cuit,monto_pagado,saldo from Trabajos where num_cuit=(?);',
+            (numeroDeCuit,))
         self.tableWidget_3.setColumnCount(8)
-
         self.tableWidget_3.setHorizontalHeaderLabels(
-            ['id_trabajo', 'tipo_trab', 'factura', 'monto_trab', 'fecha_entreg', 'num_cuit', 'monto_pagado', 'saldo'])
-
-        print('222222222222222222222222')
+            ['id_trabajo', 'tipo_trab', 'factura', 'monto_trab', 'fecha_entreg', 'num_cuit', 'monto_pagado',
+             'saldo'])
         self.tableWidget_3.setRowCount(0)
-        for row_number, row_data in enumerate(trabajosRealizados):
+        for row_number, row_data in enumerate(trabajosSegunCuit):
             self.tableWidget_3.insertRow(row_number)
             for column_number, data in enumerate(row_data):
                 self.tableWidget_3.setItem(row_number, column_number, QtWidgets.QTableWidgetItem(str(data)))
@@ -283,201 +381,40 @@ class WindowBuscar(QMainWindow):
             self.tableWidget_3.resizeColumnToContents(i)
         conn.close()
 
-    def actualizar_tableWidget_Automaticamente(self):
-        print('mama mia!')
-        self.tableWidget.clear()
-
-        nombreApellido = self.lineEdit.text().strip()
-        numCuit = self.lineEdit_3.text().strip()
-
-        print(numCuit)
-
-        dato = ['%' + nombreApellido + '%', '%' + numCuit + '%']
-
-        if dato[0] == '%%' and dato[1] == '%%':
-            self.tableWidget.setHorizontalHeaderLabels(
-                ['ID Cliente', 'Nombre y apellido', 'N° Documento', 'N° CUIT', 'N° CEL', 'Direccion', 'Localidad',
-                 'Sexo'])
-            # self.tableWidget.setCellWidget(0,0,self.tableWidget)
-            self.tableWidget.setColumnCount(0)
-            self.tableWidget.setRowCount(0)
-
-        elif dato[0] != '%%' and dato[1] != '%%':
-            self.tableWidget.setColumnCount(8)
-
-            conn = conexion()
-            cursor = conn.cursor()
-            cantidadDeFilas = cursor.execute('SELECT COUNT(ALL) from Clientes;').fetchall()[0]
-            print(cantidadDeFilas)
-            print(type(cantidadDeFilas))
-            if type(cantidadDeFilas) == tuple:
-                cantidadDeFilas = cantidadDeFilas[0]
-                self.tableWidget.setRowCount(cantidadDeFilas)
-            else:
-                self.tableWidget.setRowCount(cantidadDeFilas)
-
-            # conn = conexion()
-            # cursor = conn.cursor()
-            # cantidadDeFilas2 = cursor.execute('SELECT COUNT(ALL) from Clientes;').fetchall()[0]
-            # self.tableWidget.setRowCount(cantidadDeFilas)
-
-            self.tableWidget.setHorizontalHeaderLabels(
-                ['ID Cliente', 'Nombre y apellido', 'N° Documento', 'N° CUIT', 'N° CEL', 'Direccion', 'Localidad',
-                 'Sexo'])
-            print(dato)
-            resultado = extraer_base_cliente_nomape_numcuit(dato)
-            for row_number, row_data in enumerate(resultado):
-                self.tableWidget.insertRow(row_number)
-                for column_number, data in enumerate(row_data):
-                    self.tableWidget.setItem(row_number, column_number, QtWidgets.QTableWidgetItem(str(data)))
-            for i in [0, 1, 2, 3, 4, 5, 6, 7]:
-                self.tableWidget.resizeColumnToContents(i)
-
-        elif dato[0] != '%%':
-            self.tableWidget.setColumnCount(8)
-
-            conn = conexion()
-            cursor = conn.cursor()
-            cantidadDeFilas = list(cursor.execute('SELECT COUNT(ALL) from Clientes;').fetchall()[0])[0]
-            print(cantidadDeFilas)
-            print(type(cantidadDeFilas))
-            self.tableWidget.setRowCount(cantidadDeFilas)
-
-            self.tableWidget.setHorizontalHeaderLabels(
-                ['ID Cliente', 'Nombre y apellido', 'N° Documento', 'N° CUIT', 'N° CEL', 'Direccion', 'Localidad',
-                 'Sexo'])
-            print(dato[0])
-            resultado = extraer_base_cliente_nomape(dato[0])
-            for row_number, row_data in enumerate(resultado):
-                self.tableWidget.insertRow(row_number)
-                for column_number, data in enumerate(row_data):
-                    self.tableWidget.setItem(row_number, column_number, QtWidgets.QTableWidgetItem(str(data)))
-            for i in [0, 1, 2, 3, 4, 5, 6, 7]:
-                self.tableWidget.resizeColumnToContents(i)
-        elif dato[1] != '%%':
-            self.tableWidget.setHorizontalHeaderLabels(
-                ['ID Cliente', 'Nombre y apellido', 'N° Documento', 'N° CUIT', 'N° CEL', 'Direccion', 'Localidad',
-                 'Sexo'])
-            self.tableWidget.setColumnCount(8)
-
-            conn = conexion()
-            cursor = conn.cursor()
-            cantidadDeFilas = list(cursor.execute('SELECT COUNT(ALL) from Clientes;').fetchall()[0])[0]
-            self.tableWidget.setRowCount(cantidadDeFilas)
-
-            print(dato[1])
-            resultado = extraer_base_cliente_numcuit(dato[1])
-            for row_number, row_data in enumerate(resultado):
-                self.tableWidget.insertRow(row_number)
-                for column_number, data in enumerate(row_data):
-                    self.tableWidget.setItem(row_number, column_number, QtWidgets.QTableWidgetItem(str(data)))
-            for i in [0, 1, 2, 3, 4, 5, 6, 7]:
-                self.tableWidget.resizeColumnToContents(i)
-
-    def actualizar_tableWidget(dato):  # dato = ['%' + nombreApellido + '%','%' + numCuit + '%']
-        if dato[0] != '' and dato[1] != '':
-            resultado = extraer_base_cliente_nomape_numcuit(dato)
-        elif dato[0] != '' and dato[1] == '':
-            resultado = extraer_base_cliente_nomape(dato)
-        elif dato[0] == '' and dato[1] != '':
-            resultado = extraer_base_cliente_numcuit(dato)
-        self.tableWidget.setRowCount(0)
-        for row_number, row_data in enumerate(resultado):
-            self.tableWidget.insertRow(row_number)
-            for column_number, data in enumerate(row_data):
-                self.tableWidget.setItem(row_number, column_number, QtWidgets.QTableWidgetItem(str(data)))
-        for i in [0, 1, 2, 3, 4, 5, 6, 7]:
-            self.tableWidget.resizeColumnToContents(i)
-        print(resultado.fetchall())
-
-    def trabajoRealizados(self):
-        print('trabajoRealizados')
-
-    def cuenta(self):
-        print('cuenta')
-
-    def pagarUnTrabajo(self):
-        print('pagarUnTrabajo')
-        idTrabajo = self.lineEdit_10.text()
-        monto = self.lineEdit_11.text()
-        pagarUnMonto(idTrabajo, monto)
-
-        conn = conexion()
-        # print('mostrar trabajos del cliente cargado')
-
-        # resultado = extraer_todo_base_cliente(conn)
-        # consulta = extraer_cuit_del_cliente(conn, idCli)
-        # print('-----------###------------')
-        # print('-----------###------------')
-        # print('-----------###------------')
-        # print(resultado.fetchall()[0][0])
-        # cuitCliente = consulta.fetchall()[0][0]
-
-        cuitCliente = cauitSegunIdTrabajo(conn, idTrabajo)
-
-        trabajosRealizados = trabajosRealizadosSegunCuit(conn, cuitCliente)
-        print('-----------###------------')
-        print('-----------###------------')
-        print('-----------###------------')
-        self.tableWidget_3.setColumnCount(8)
-
-        self.tableWidget_3.setHorizontalHeaderLabels(
-            ['id_trabajo', 'tipo_trab', 'factura', 'monto_trab', 'fecha_entreg', 'num_cuit', 'monto_pagado', 'saldo'])
-        self.tableWidget_3.setRowCount(0)
-
-        for row_number, row_data in enumerate(trabajosRealizados):
-            self.tableWidget_3.insertRow(row_number)
-            for column_number, data in enumerate(row_data):
-                self.tableWidget_3.setItem(row_number, column_number, QtWidgets.QTableWidgetItem(str(data)))
-        for i in [0, 1, 2, 3, 4, 5, 6, 7]:
-            self.tableWidget_3.resizeColumnToContents(i)
-        conn.close()
-
-
-###############################################################
 
 class WindowGanan(QMainWindow):
     def __init__(self):
         super().__init__()
         uic.loadUi('ganancias.ui', self)
+        self.label_7.setText('')
         self.setWindowTitle('Ganancias')
-        # self.dateEdit.setDisplayFormat("dd.MM.yyyy")
-        # self.dateEdit.dateChanged.connect(self.printttt)
         self.pushButton.clicked.connect(self.reporte)
 
     def reporte(self):
-        print('generar reporte')
-
-        dia = self.dateEdit.date().day()
-        mes = self.dateEdit.date().month()
-        anio = self.dateEdit.date().year()
-        print(dia, mes, anio)
-        fechaNueva1 = str(dia) + '/' + str(mes) + '/' + str(anio)
-
-        dia = self.dateEdit_2.date().day()
-        mes = self.dateEdit_2.date().month()
-        anio = self.dateEdit_2.date().year()
-        print(dia, mes, anio)
-        fechaNueva2 = str(dia) + '/' + str(mes) + '/' + str(anio)
-
-        print(fechaNueva1<fechaNueva2)
-
-        conn=conexion()
-
-        #sumar todos los montosPagados
-        ingresoBruto=calcularIngresoBruto(conn,fechaNueva1,fechaNueva2)
+        conn = conexion()
+        ingresoBruto = calcularIngresoBruto(conn)
+        listaNueva = []
+        for i in ingresoBruto:
+            if i[0] == None:
+                pass
+            else:
+                listaNueva.append(i[0])
+        total = 0
+        for i in listaNueva:
+            total = total + float(i[0])
+        self.label_7.setText(str(total))
+        listaInsumos = extraerListaInsumos(conn)
+        totalInsumos = 0
+        for i in listaInsumos:
+            totalInsumos = totalInsumos + float(i[0])
+        self.label_8.setText(str(totalInsumos))
+        ingresoNeto = total - totalInsumos
+        self.label_9.setText(str(ingresoNeto))
 
     def printttt(self):
-        # print('qweqweqwe')
-        # fecha=self.dateEdit.date()
-        # fecha = self.dateEdit.displayFormat()
         dia = self.dateEdit.date().day()
         mes = self.dateEdit.date().month()
         anio = self.dateEdit.date().year()
-        print(dia, mes, anio)
-        print(type(dia))
-
-        # print(fecha)
 
 
 class WindowInsu(QMainWindow):
@@ -487,18 +424,23 @@ class WindowInsu(QMainWindow):
         self.setWindowTitle('Insumos')
         self.btnRegistrar.clicked.connect(self.registrarInsumo)
 
-        def registrarInsumo(self):
-            descripcion = self.nombap.text()
-            marca = self.nombap_2.text()
-            cantidad = self.nombap_3.text()
-            precioUnitario = self.nombap_4.text()
-            fechaCompra = self.nombap_5.text()
-
-            dato = [descripcion, marca, cantidad, precioUnitario, fechaCompra]
-            respuesta = insertar_base_insumo(dato)
+    def registrarInsumo(self):
+        descripcion = self.nombap.text()
+        marca = self.nombap_2.text()
+        cantidad = self.nombap_3.text()
+        precioUnitario = self.nombap_4.text()
+        fechaCompra = self.nombap_5.text()
+        if (descripcion == '' or marca == '' or cantidad == '' or precioUnitario == '' or fechaCompra == ''):
+            pass
+        else:
+            total = int(cantidad) * float(precioUnitario.replace('$', ''))
+            dato = [descripcion, marca, cantidad, precioUnitario, fechaCompra, str(total)]
+            insertar_base_insumo(dato)
             self.nombap.setText("")
             self.nombap_2.setText("")
-            self.nomba
+            self.nombap_3.setText("")
+            self.nombap_4.setText("")
+            self.nombap_5.setText("")
 
 
 class WindowAlerta(QMainWindow):
@@ -528,12 +470,57 @@ class WindowAlertaClienteNoRegistrado(QMainWindow):
         uic.loadUi('gui_noHayClienteRegistrado.ui', self)
         self.setWindowTitle('trabajo guardado')
 
+    # class WindowBorrarCliente(QMainWindow):
+    #     def __init__(self):
+    #         super().__init__()
+    #         uic.loadUi('borrarCliente.ui', self)
+    #         self.pushButton.clicked.connect(self.borrarCliente)
+    #
+    #     def borrarCliente(self):
+    #         print('borrar cliente!!!')
+
+    def actualizar_tableWidget(dato):
+        if dato[0] != '' and dato[1] != '':
+            resultado = extraer_base_cliente_nomape_numcuit(dato)
+        elif dato[0] != '' and dato[1] == '':
+            resultado = extraer_base_cliente_nomape(dato)
+        elif dato[0] == '' and dato[1] != '':
+            resultado = extraer_base_cliente_numcuit(dato)
+        self.tableWidget.setRowCount(0)
+        for row_number, row_data in enumerate(resultado):
+            self.tableWidget.insertRow(row_number)
+            for column_number, data in enumerate(row_data):
+                self.tableWidget.setItem(row_number, column_number, QtWidgets.QTableWidgetItem(str(data)))
+        for i in [0, 1, 2, 3, 4, 5, 6, 7]:
+            self.tableWidget.resizeColumnToContents(i)
+        print(resultado.fetchall())
+
+    def pagarUnTrabajo(self):
+        idTrabajo = self.lineEdit_10.text()
+        monto = self.lineEdit_11.text()
+        pagarUnMonto(idTrabajo, monto)
+        conn = conexion()
+        cuitCliente = cauitSegunIdTrabajo(conn, idTrabajo)
+        trabajosRealizados = trabajosRealizadosSegunCuit(conn, cuitCliente)
+        self.tableWidget_3.setColumnCount(8)
+        self.tableWidget_3.setHorizontalHeaderLabels(
+            ['id_trabajo', 'tipo_trab', 'factura', 'monto_trab', 'fecha_entreg', 'num_cuit', 'monto_pagado', 'saldo'])
+        self.tableWidget_3.setRowCount(0)
+        for row_number, row_data in enumerate(trabajosRealizados):
+            self.tableWidget_3.insertRow(row_number)
+            for column_number, data in enumerate(row_data):
+                self.tableWidget_3.setItem(row_number, column_number, QtWidgets.QTableWidgetItem(str(data)))
+        for i in [0, 1, 2, 3, 4, 5, 6, 7]:
+            self.tableWidget_3.resizeColumnToContents(i)
+        conn.close()
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     # basededatos
     db_cliente()
     db_trabajo()
+    db_insumos()
     gui = MainWindow()
     gui.setWindowTitle('Software para consultor en TI')
     guiRegistro = WindowRegistro()
@@ -542,6 +529,7 @@ if __name__ == '__main__':
     guiGanan = WindowGanan()
     guiInsu = WindowInsu()
     guiAlerta = WindowAlerta()
+    # borrarCliente = WindowBorrarCliente()
     gui_noHayClienteRegistrado = WindowAlertaClienteNoRegistrado()
     guiClienteGuardado = WindowClienteGuardado()
     guiTrabajoGuardado = WindowTrabajoGuardado()

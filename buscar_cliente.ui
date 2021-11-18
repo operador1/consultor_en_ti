@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1153</width>
+    <width>1142</width>
     <height>905</height>
    </rect>
   </property>
@@ -82,6 +82,13 @@ font: 20pt &quot;Century Gothic&quot;;</string>
               </property>
              </widget>
             </item>
+            <item>
+             <widget class="QPushButton" name="pushButton_5">
+              <property name="text">
+               <string>Cargar</string>
+              </property>
+             </widget>
+            </item>
            </layout>
           </item>
          </layout>
@@ -96,6 +103,15 @@ font: 20pt &quot;Century Gothic&quot;;</string>
         <property name="editTriggers">
          <set>QAbstractItemView::NoEditTriggers</set>
         </property>
+        <attribute name="horizontalHeaderVisible">
+         <bool>true</bool>
+        </attribute>
+        <attribute name="horizontalHeaderCascadingSectionResizes">
+         <bool>false</bool>
+        </attribute>
+        <attribute name="verticalHeaderVisible">
+         <bool>false</bool>
+        </attribute>
         <column>
          <property name="text">
           <string>pepe</string>
@@ -137,7 +153,20 @@ font: 20pt &quot;Century Gothic&quot;;</string>
          </widget>
         </item>
         <item>
-         <widget class="QLineEdit" name="lineEdit_2"/>
+         <widget class="QComboBox" name="comboBox">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Maximum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>555</width>
+            <height>0</height>
+           </size>
+          </property>
+         </widget>
         </item>
         <item>
          <widget class="QPushButton" name="pushButton_2">
@@ -157,61 +186,51 @@ font: 20pt &quot;Century Gothic&quot;;</string>
          <string notr="true">font: 12pt &quot;MS Shell Dlg 2&quot;;</string>
         </property>
         <property name="currentIndex">
-         <number>0</number>
+         <number>2</number>
         </property>
         <widget class="QWidget" name="tab">
          <attribute name="title">
           <string>Trabajos realizados</string>
          </attribute>
-         <widget class="QTableWidget" name="tableWidget_3">
-          <property name="geometry">
-           <rect>
-            <x>20</x>
-            <y>10</y>
-            <width>661</width>
-            <height>192</height>
-           </rect>
-          </property>
-         </widget>
-         <widget class="QLineEdit" name="lineEdit_10">
-          <property name="geometry">
-           <rect>
-            <x>700</x>
-            <y>20</y>
-            <width>113</width>
-            <height>20</height>
-           </rect>
-          </property>
-          <property name="placeholderText">
-           <string>IdTrabajo</string>
-          </property>
-         </widget>
-         <widget class="QLineEdit" name="lineEdit_11">
-          <property name="geometry">
-           <rect>
-            <x>700</x>
-            <y>50</y>
-            <width>113</width>
-            <height>20</height>
-           </rect>
-          </property>
-          <property name="placeholderText">
-           <string>monto</string>
-          </property>
-         </widget>
-         <widget class="QPushButton" name="pushButton_4">
-          <property name="geometry">
-           <rect>
-            <x>700</x>
-            <y>80</y>
-            <width>111</width>
-            <height>41</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>Pagar</string>
-          </property>
-         </widget>
+         <layout class="QHBoxLayout" name="horizontalLayout_13">
+          <item>
+           <widget class="QSplitter" name="splitter">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <widget class="QTableWidget" name="tableWidget_3">
+             <attribute name="verticalHeaderVisible">
+              <bool>false</bool>
+             </attribute>
+            </widget>
+            <widget class="QWidget" name="layoutWidget">
+             <layout class="QVBoxLayout" name="verticalLayout_5">
+              <item>
+               <widget class="QLineEdit" name="lineEdit_10">
+                <property name="placeholderText">
+                 <string>IdTrabajo</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="lineEdit_11">
+                <property name="placeholderText">
+                 <string>monto</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButton_4">
+                <property name="text">
+                 <string>Pagar</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </widget>
+          </item>
+         </layout>
         </widget>
         <widget class="QWidget" name="tab_4">
          <attribute name="title">
@@ -268,7 +287,11 @@ font: 20pt &quot;Century Gothic&quot;;</string>
                </widget>
               </item>
               <item>
-               <widget class="QLineEdit" name="lineEdit_5"/>
+               <widget class="QLineEdit" name="lineEdit_5">
+                <property name="inputMask">
+                 <string>99999999</string>
+                </property>
+               </widget>
               </item>
              </layout>
             </item>
@@ -294,7 +317,11 @@ font: 20pt &quot;Century Gothic&quot;;</string>
                </widget>
               </item>
               <item>
-               <widget class="QLineEdit" name="lineEdit_6"/>
+               <widget class="QLineEdit" name="lineEdit_6">
+                <property name="inputMask">
+                 <string>99-99999999-9</string>
+                </property>
+               </widget>
               </item>
              </layout>
             </item>
@@ -426,6 +453,37 @@ font: 20pt &quot;Century Gothic&quot;;</string>
            </widget>
           </item>
          </layout>
+        </widget>
+        <widget class="QWidget" name="tab_2">
+         <attribute name="title">
+          <string>Borrar cliente</string>
+         </attribute>
+         <widget class="QPushButton" name="pushButton_6">
+          <property name="geometry">
+           <rect>
+            <x>40</x>
+            <y>90</y>
+            <width>75</width>
+            <height>27</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Borrar</string>
+          </property>
+         </widget>
+         <widget class="QLabel" name="label_2">
+          <property name="geometry">
+           <rect>
+            <x>30</x>
+            <y>20</y>
+            <width>131</width>
+            <height>19</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Borrar cliente tal...</string>
+          </property>
+         </widget>
         </widget>
        </widget>
       </item>

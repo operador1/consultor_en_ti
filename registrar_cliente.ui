@@ -47,7 +47,7 @@
     <property name="geometry">
      <rect>
       <x>130</x>
-      <y>140</y>
+      <y>180</y>
       <width>261</width>
       <height>31</height>
      </rect>
@@ -68,36 +68,11 @@
      <string>Nombre y apellido:</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_4">
-    <property name="geometry">
-     <rect>
-      <x>130</x>
-      <y>180</y>
-      <width>330</width>
-      <height>30</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Century Gothic</family>
-      <pointsize>20</pointsize>
-      <weight>50</weight>
-      <italic>false</italic>
-      <bold>false</bold>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">font: 20pt &quot;Century Gothic&quot;;</string>
-    </property>
-    <property name="text">
-     <string>Número de documento:</string>
-    </property>
-   </widget>
    <widget class="QLabel" name="label_5">
     <property name="geometry">
      <rect>
       <x>130</x>
-      <y>220</y>
+      <y>140</y>
       <width>230</width>
       <height>30</height>
      </rect>
@@ -222,13 +197,13 @@
     <property name="geometry">
      <rect>
       <x>550</x>
-      <y>140</y>
+      <y>180</y>
       <width>300</width>
       <height>30</height>
      </rect>
     </property>
     <property name="inputMask">
-     <string>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</string>
+     <string>aaaaaaaaaaaaaaaaaaaaaaaa</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="loc">
@@ -274,26 +249,13 @@
     <property name="geometry">
      <rect>
       <x>550</x>
-      <y>220</y>
+      <y>140</y>
       <width>300</width>
       <height>30</height>
      </rect>
     </property>
     <property name="inputMask">
      <string>99-99999999-9</string>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="numdoc">
-    <property name="geometry">
-     <rect>
-      <x>550</x>
-      <y>180</y>
-      <width>300</width>
-      <height>30</height>
-     </rect>
-    </property>
-    <property name="inputMask">
-     <string>99999999</string>
     </property>
    </widget>
    <widget class="QComboBox" name="sexo">
@@ -369,7 +331,6 @@
  </widget>
  <tabstops>
   <tabstop>nombap</tabstop>
-  <tabstop>numdoc</tabstop>
   <tabstop>numcuit</tabstop>
   <tabstop>numcel</tabstop>
   <tabstop>direc</tabstop>

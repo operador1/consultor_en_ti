@@ -35,52 +35,6 @@
      <string>Ganancias</string>
     </property>
    </widget>
-   <widget class="QDateEdit" name="dateEdit">
-    <property name="geometry">
-     <rect>
-      <x>115</x>
-      <y>76</y>
-      <width>110</width>
-      <height>22</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QDateEdit" name="dateEdit_2">
-    <property name="geometry">
-     <rect>
-      <x>255</x>
-      <y>76</y>
-      <width>110</width>
-      <height>22</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_2">
-    <property name="geometry">
-     <rect>
-      <x>50</x>
-      <y>80</y>
-      <width>56</width>
-      <height>13</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Reporte del</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_3">
-    <property name="geometry">
-     <rect>
-      <x>237</x>
-      <y>80</y>
-      <width>8</width>
-      <height>13</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>al</string>
-    </property>
-   </widget>
    <widget class="QLabel" name="label_4">
     <property name="geometry">
      <rect>
@@ -162,14 +116,14 @@
    <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
-      <x>400</x>
+      <x>110</x>
       <y>70</y>
-      <width>86</width>
+      <width>125</width>
       <height>23</height>
      </rect>
     </property>
     <property name="text">
-     <string>Generar reporte</string>
+     <string>Generar reporte general</string>
     </property>
    </widget>
   </widget>

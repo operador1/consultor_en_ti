@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1069</width>
-    <height>563</height>
+    <height>528</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,10 +20,10 @@
    <widget class="QLabel" name="label_2">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>30</y>
-      <width>421</width>
-      <height>41</height>
+      <x>10</x>
+      <y>56</y>
+      <width>377</width>
+      <height>37</height>
      </rect>
     </property>
     <property name="font">
@@ -43,243 +43,255 @@
      <string>Registrar un nuevo trabajo</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_3">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>120</x>
-      <y>130</y>
-      <width>210</width>
-      <height>40</height>
+      <x>100</x>
+      <y>370</y>
+      <width>244</width>
+      <height>42</height>
      </rect>
     </property>
-    <property name="font">
-     <font>
-      <family>Century Gothic</family>
-      <pointsize>20</pointsize>
-      <weight>50</weight>
-      <italic>false</italic>
-      <bold>false</bold>
-     </font>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QPushButton" name="btnRegistrar">
+       <property name="styleSheet">
+        <string notr="true">font: 20pt &quot;Century Gothic&quot;;</string>
+       </property>
+       <property name="text">
+        <string>Registrar</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnCancelar">
+       <property name="styleSheet">
+        <string notr="true">font: 20pt &quot;Century Gothic&quot;;</string>
+       </property>
+       <property name="text">
+        <string>Cancelar</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>12</x>
+      <y>163</y>
+      <width>661</width>
+      <height>186</height>
+     </rect>
     </property>
-    <property name="styleSheet">
-     <string notr="true">font: 20pt &quot;Century Gothic&quot;;</string>
+    <layout class="QFormLayout" name="formLayout">
+     <item row="0" column="0">
+      <widget class="QLabel" name="label_7">
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>33</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>Century Gothic</family>
+         <pointsize>20</pointsize>
+         <weight>50</weight>
+         <italic>false</italic>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 20pt &quot;Century Gothic&quot;;</string>
+       </property>
+       <property name="text">
+        <string>Número de CUIT del solicitante:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QComboBox" name="comboBox_2">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>33</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_3">
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>33</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>Century Gothic</family>
+         <pointsize>20</pointsize>
+         <weight>50</weight>
+         <italic>false</italic>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 20pt &quot;Century Gothic&quot;;</string>
+       </property>
+       <property name="text">
+        <string>Tipo de trabajo:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLineEdit" name="tipotrab">
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>33</height>
+        </size>
+       </property>
+       <property name="inputMask">
+        <string>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label_4">
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>33</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>Century Gothic</family>
+         <pointsize>20</pointsize>
+         <weight>50</weight>
+         <italic>false</italic>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 20pt &quot;Century Gothic&quot;;</string>
+       </property>
+       <property name="text">
+        <string>¿Se realizará factura?</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QComboBox" name="comboBox">
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>33</height>
+        </size>
+       </property>
+       <item>
+        <property name="text">
+         <string>SI</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>NO</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="label_5">
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>33</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>Century Gothic</family>
+         <pointsize>20</pointsize>
+         <weight>50</weight>
+         <italic>false</italic>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 20pt &quot;Century Gothic&quot;;</string>
+       </property>
+       <property name="text">
+        <string>Monto del trabajo:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QLineEdit" name="montotrab">
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>33</height>
+        </size>
+       </property>
+       <property name="inputMask">
+        <string>$999999999</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0">
+      <widget class="QLabel" name="label_6">
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>33</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>Century Gothic</family>
+         <pointsize>20</pointsize>
+         <weight>50</weight>
+         <italic>false</italic>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 20pt &quot;Century Gothic&quot;;</string>
+       </property>
+       <property name="text">
+        <string>Fecha de entrega:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QDateEdit" name="dateEdit">
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>33</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QPushButton" name="pushButton">
+    <property name="geometry">
+     <rect>
+      <x>680</x>
+      <y>170</y>
+      <width>171</width>
+      <height>23</height>
+     </rect>
     </property>
     <property name="text">
-     <string>Tipo de trabajo:</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_4">
-    <property name="geometry">
-     <rect>
-      <x>120</x>
-      <y>180</y>
-      <width>290</width>
-      <height>40</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Century Gothic</family>
-      <pointsize>20</pointsize>
-      <weight>50</weight>
-      <italic>false</italic>
-      <bold>false</bold>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">font: 20pt &quot;Century Gothic&quot;;</string>
-    </property>
-    <property name="text">
-     <string>¿Se realizará factura?</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_5">
-    <property name="geometry">
-     <rect>
-      <x>120</x>
-      <y>230</y>
-      <width>260</width>
-      <height>40</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Century Gothic</family>
-      <pointsize>20</pointsize>
-      <weight>50</weight>
-      <italic>false</italic>
-      <bold>false</bold>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">font: 20pt &quot;Century Gothic&quot;;</string>
-    </property>
-    <property name="text">
-     <string>Monto del trabajo:</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_6">
-    <property name="geometry">
-     <rect>
-      <x>120</x>
-      <y>280</y>
-      <width>260</width>
-      <height>40</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Century Gothic</family>
-      <pointsize>20</pointsize>
-      <weight>50</weight>
-      <italic>false</italic>
-      <bold>false</bold>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">font: 20pt &quot;Century Gothic&quot;;</string>
-    </property>
-    <property name="text">
-     <string>Fecha de entrega:</string>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="tipotrab">
-    <property name="geometry">
-     <rect>
-      <x>580</x>
-      <y>140</y>
-      <width>291</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="inputMask">
-     <string>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</string>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="fechaentreg">
-    <property name="geometry">
-     <rect>
-      <x>580</x>
-      <y>290</y>
-      <width>291</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="inputMask">
-     <string>99-99-99</string>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="montotrab">
-    <property name="geometry">
-     <rect>
-      <x>580</x>
-      <y>240</y>
-      <width>291</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="inputMask">
-     <string>$999999999</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="btnCancelar">
-    <property name="geometry">
-     <rect>
-      <x>810</x>
-      <y>400</y>
-      <width>130</width>
-      <height>40</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">font: 20pt &quot;Century Gothic&quot;;</string>
-    </property>
-    <property name="text">
-     <string>Cancelar</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="btnRegistrar">
-    <property name="geometry">
-     <rect>
-      <x>630</x>
-      <y>400</y>
-      <width>130</width>
-      <height>40</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">font: 20pt &quot;Century Gothic&quot;;</string>
-    </property>
-    <property name="text">
-     <string>Registrar</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_7">
-    <property name="geometry">
-     <rect>
-      <x>120</x>
-      <y>330</y>
-      <width>420</width>
-      <height>40</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Century Gothic</family>
-      <pointsize>20</pointsize>
-      <weight>50</weight>
-      <italic>false</italic>
-      <bold>false</bold>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">font: 20pt &quot;Century Gothic&quot;;</string>
-    </property>
-    <property name="text">
-     <string>Número de CUIT del solicitante:</string>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="cuitsolici">
-    <property name="geometry">
-     <rect>
-      <x>580</x>
-      <y>340</y>
-      <width>291</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="inputMask">
-     <string>99-99999999-9</string>
-    </property>
-   </widget>
-   <widget class="QComboBox" name="comboBox">
-    <property name="geometry">
-     <rect>
-      <x>580</x>
-      <y>190</y>
-      <width>290</width>
-      <height>30</height>
-     </rect>
-    </property>
-    <item>
-     <property name="text">
-      <string>SI</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>NO</string>
-     </property>
-    </item>
-   </widget>
-   <widget class="QDateEdit" name="dateEdit">
-    <property name="geometry">
-     <rect>
-      <x>380</x>
-      <y>290</y>
-      <width>110</width>
-      <height>22</height>
-     </rect>
+     <string>actualizar CUIT</string>
     </property>
    </widget>
   </widget>
@@ -289,8 +301,7 @@
   <tabstop>tipotrab</tabstop>
   <tabstop>comboBox</tabstop>
   <tabstop>montotrab</tabstop>
-  <tabstop>fechaentreg</tabstop>
-  <tabstop>cuitsolici</tabstop>
+  <tabstop>dateEdit</tabstop>
   <tabstop>btnRegistrar</tabstop>
   <tabstop>btnCancelar</tabstop>
  </tabstops>
@@ -303,8 +314,8 @@
    <slot>close()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>874</x>
-     <y>429</y>
+     <x>342</x>
+     <y>410</y>
     </hint>
     <hint type="destinationlabel">
      <x>937</x>
